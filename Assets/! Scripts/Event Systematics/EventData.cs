@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Playables;
 using UnityEngine;
 
 public class EventData
@@ -9,3 +10,41 @@ public class EventData
 
     }
 }
+public class CombatStartEvent : EventData{ }
+
+public class TurnStartEvent : EventData 
+{
+    public Character unit;
+}
+
+public class AbilityUsedEvent : EventData
+{
+    public Character caster;
+    public Ability ability;
+    public List<Character> targets;
+}
+public class AbilityFinishedEvent : EventData
+{
+    public Character caster;
+    public Ability ability;
+    public List<Character> targets;
+}
+
+public class DamageEvent : EventData
+{
+    public Character attacker;
+    public Character target;
+    public int damage;
+}
+
+public class UnitDeathEvent : EventData
+{
+    public Character unit;
+}
+
+public class TurnEndEvent : EventData
+{
+    public Character unit;
+}
+
+

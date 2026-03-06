@@ -22,7 +22,7 @@ public class GameInitializer : MonoBehaviour
             loadingScreenDisposible.SetLoadingBarPercent(.66f);
             PrepareGame();
             loadingScreenDisposible.SetLoadingBarPercent(1f);
-            await UniTask.Delay(TimeSpan.FromSeconds(1), DelayType.DeltaTime, PlayerLoopTiming.Update);
+            //await UniTask.Delay(TimeSpan.FromSeconds(1), DelayType.DeltaTime, PlayerLoopTiming.Update);
         }
 
         await BeginGame();
