@@ -156,6 +156,7 @@ MonoBehaviour:
   Background: {fileID: 1612834150379816117, guid: 834d514affc5d8f4f8ac1f2cb01c9c0f, type: 3}
   Gameplay: {fileID: 1250846970060847269, guid: d4debf4d367c34b4b82f239f7fedf744, type: 3}
   _loadingScreen: {fileID: 2210939412646469871, guid: ebd12a94718720445b49251b0f98fecd, type: 3}
+  _combatManagers: {fileID: 8832616120640694100, guid: 0c408d499839de34eaaf4395323de568, type: 3}
 --- !u!4 &2117645539
 Transform:
   m_ObjectHideFlags: 0

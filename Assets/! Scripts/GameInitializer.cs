@@ -8,9 +8,15 @@ public class GameInitializer : MonoBehaviour
     [SerializeField] private AudioService _audioService;
     [SerializeField] private GameObject Forced, UI, Background, Gameplay;
     [SerializeField] private LoadingScreen _loadingScreen;
+    [SerializeField] public GameObject _combatManagers;
+
+    public static GameInitializer instance { get; private set; }
 
     private async void Start()
     {
+        //Should be the only instance in the game
+        if (instance == null) instance = this; else { Destroy(gameObject); return; }
+
         BindObjects();
 
         using (var loadingScreenDisposible = new ShowLoadingScreenDisposable(_loadingScreen, _mainCamera))
@@ -22,7 +28,7 @@ public class GameInitializer : MonoBehaviour
             loadingScreenDisposible.SetLoadingBarPercent(.66f);
             PrepareGame();
             loadingScreenDisposible.SetLoadingBarPercent(1f);
-            //await UniTask.Delay(TimeSpan.FromSeconds(1), DelayType.DeltaTime, PlayerLoopTiming.Update);
+            await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
         }
 
         await BeginGame();
@@ -31,12 +37,15 @@ public class GameInitializer : MonoBehaviour
     private void BindObjects()
     {
         _loadingScreen = Instantiate(_loadingScreen);
-        _mainCamera = Instantiate(_mainCamera);
+        _mainCamera = Instantiate(_mainCamera); 
         _audioService = Instantiate(_audioService);
+        _combatManagers = Instantiate(_combatManagers);
     }
 
     private async UniTask Initialization()
     {
+        await UniTask.Delay(TimeSpan.FromSeconds(.1f), DelayType.DeltaTime, PlayerLoopTiming.Update);
+        _audioService.Initialize();
         //Services like analytics or new input system should be enabled here
         // await inputSystem.Enabled;
     }
@@ -46,6 +55,7 @@ public class GameInitializer : MonoBehaviour
         Forced = Instantiate(Forced);
         UI = Instantiate(UI);
         Background = Instantiate(Background);
+        await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
         Gameplay = Instantiate(Gameplay);
     }
 
@@ -59,5 +69,7 @@ public class GameInitializer : MonoBehaviour
     private async UniTask BeginGame()
     {
         _audioService.PlayMusic("Battle Theme");
+        await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
+        _combatManagers.GetComponent<CombatManager>().StartCombat();
     }
 }

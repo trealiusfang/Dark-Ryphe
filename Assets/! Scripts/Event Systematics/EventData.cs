@@ -11,6 +11,10 @@ public class EventData
     }
 }
 public class CombatStartEvent : EventData{ }
+public class CombatEndEvent : EventData 
+{
+    public CharacterTeam winningTeam;
+}
 
 public class TurnStartEvent : EventData 
 {
@@ -45,6 +49,17 @@ public class UnitDeathEvent : EventData
 public class TurnEndEvent : EventData
 {
     public Character unit;
+}
+
+public class SFXEvent : EventData 
+{
+    public string sfx_string;
+    public AudioClip sfx_clip;
+}
+public class MusicEvent : EventData 
+{
+    public string music_string;
+    public AudioClip music_clip;
 }
 
 

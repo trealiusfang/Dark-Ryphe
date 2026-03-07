@@ -11,16 +11,23 @@ public class AudioService : MonoBehaviour
 
     public void Initialize()
     {
-        SFXSource = new AudioSource();
-        SFXSource.playOnAwake = false;
-
-        MusicSource = new AudioSource();
-        MusicSource.playOnAwake = false;
-
-        SFXSource = Instantiate(SFXSource, transform);
-        MusicSource = Instantiate(MusicSource, transform);
-
         DontDestroyOnLoad(gameObject);
+
+        EventBus.Sub<SFXEvent>(SFXEventResponder);
+        EventBus.Sub<MusicEvent>(MusicEventResponder);
+    }
+
+    private void SFXEventResponder(SFXEvent ev)
+    {
+        PlaySFX(ev.sfx_string);
+
+        PlaySFX(ev.sfx_clip);
+    }
+    private void MusicEventResponder(MusicEvent ev)
+    {
+        PlayMusic(ev.music_string);
+
+        PlayMusic(ev.music_clip);
     }
 
     /// <summary>
@@ -29,7 +36,7 @@ public class AudioService : MonoBehaviour
     /// <param name="AudioName"></param>
     public void PlaySFX(string AudioName)
     {
-        if (AudioName == "") return;
+        if (String.IsNullOrEmpty(AudioName)) return;
 
         for (int i = 0; i < SFX.Length;  i++)
         {

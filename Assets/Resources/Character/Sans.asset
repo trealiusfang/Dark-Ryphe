@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8407e4c46b0aabf42886579a6da4657a, type: 3}
+  m_Name: Sans
+  m_EditorClassIdentifier: 
+  characterName: Sans
+  charSprite: {fileID: 21300000, guid: 822fe0f0254a3e946a5f726e3136373a, type: 3}
+  characterStats:
+    maxHP: 10
+    maxMana: 20
+    manaRegen: 3
+    speed: 15
+    power: 12
+    luck: 99
+  Abilities:
+  - {fileID: 11400000, guid: 837d2ad2ba550be4b93ec75b35d98b68, type: 2}
+  - {fileID: 11400000, guid: 0513213ce96b09e4d9e1faaee433f99d, type: 2}
+  - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}

@@ -5,27 +5,32 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public List<Ability> abilities = new();
+    public CharacterData charData;
+    public CharacterTeam Team;
+    [HideInInspector] public AbilityHolder abilityHolder;
 
-    public CombatStats baseStats;
-    public Stats stats;
-    public float currentHP;
-    bool canPlay = false;
+    [HideInInspector] public CombatStats baseStats;
+     public Stats currentStats;
+    
     void Awake()
     {
-        currentHP = baseStats.maxHP;
-    }
+        abilityHolder = GetComponent<AbilityHolder>();
+        if (charData != null)
+        {
+            baseStats = charData.characterStats;
+            GetComponent<SpriteRenderer>().sprite = charData.charSprite;
+            transform.name = charData.characterName + " (Character)";
+            abilityHolder.Abilities = charData.Abilities;
+        }
 
-    private void StartTurn(TurnStartEvent turnStartEvent)
-    {
-        canPlay = true;
+        currentStats.currentHP = baseStats.maxHP;
+        currentStats.currentMana = baseStats.maxMana;
     }
 
     public void TakeDamage(int dmg)
     {
-        currentHP -= dmg;
-
-        if (currentHP <= 0)
+        currentStats.currentHP -= dmg;
+        if (currentStats.currentHP <= 0)
             Die();
     }
 
@@ -40,20 +45,3 @@ public class Character : MonoBehaviour
     }
 }
 
-[Serializable]
-public class CombatStats
-{
-    public short maxHP = 30;
-    public short maxMana = 10;
-    public short manaRegen = 2;
-    public short speed = 4;
-    public short power = 2;
-    public short luck = 3;
-}
-
-[Serializable]
-public class Stats
-{
-    public short currentHP = 30;
-    public short currentMana = 10;
-}

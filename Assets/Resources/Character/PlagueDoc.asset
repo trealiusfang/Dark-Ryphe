@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8407e4c46b0aabf42886579a6da4657a, type: 3}
+  m_Name: PlagueDoc
+  m_EditorClassIdentifier: 
+  characterName: Plague Doc
+  charSprite: {fileID: -2085745340882890450, guid: 51eb4ed1c6144bc4c9d4429142847425, type: 3}
+  characterStats:
+    maxHP: 45
+    maxMana: 10
+    manaRegen: 5
+    speed: 4
+    power: 7
+    luck: 4
+  Abilities:
+  - {fileID: 11400000, guid: 20016cec031559c43a398eb130ec35c7, type: 2}
+  - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
