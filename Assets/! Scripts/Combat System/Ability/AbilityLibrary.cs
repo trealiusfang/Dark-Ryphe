@@ -1,8 +1,8 @@
+using EffectLibrary;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static AbilityLibrary;
 public static class AbilityLibrary
 {
     public class NullAbility : Ability
@@ -21,7 +21,7 @@ public static class AbilityLibrary
             List<Character> targets)
         {
             EventBus.Raise(new SFXEvent { sfx_string = "Error Alarm"});
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             EventBus.Raise(new TurnEndEvent { unit = caster });
         }
     }
@@ -68,7 +68,7 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                target.TakeDamage(caster.baseStats.power);
+                EffectSystem.Apply(new DamageEffect(caster, target, caster.baseStats.power));
                 Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(caster.baseStats.power * .75f) + " damage! By: " + caster.name);
             }
         }
@@ -92,7 +92,7 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                target.TakeDamage(Mathf.FloorToInt(caster.baseStats.power * .75f));
+                EffectSystem.Apply(new DamageEffect(caster, target, Mathf.FloorToInt(caster.baseStats.power * .75f)));
                 Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(caster.baseStats.power * .75f) + " damage! By: " + caster.name);
             }
         }
@@ -116,8 +116,9 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                target.currentStats.currentMana -= 5;
-                caster.currentStats.currentMana += 5;
+                int amount = target.currentStats.currentMana < 5 ? target.currentStats.currentMana : 5;
+                target.currentStats.currentMana -= amount;
+                caster.currentStats.currentMana += amount;
             }
         }
     }
@@ -165,7 +166,8 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                target.TakeDamage(Mathf.FloorToInt(caster.baseStats.power * 1.2f));
+                EffectSystem.Apply(new DamageEffect(caster, target, Mathf.FloorToInt(caster.baseStats.power * 1.2f)));
+                Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(caster.baseStats.power * .75f) + " damage! By: " + caster.name);
             }
         }
     }
