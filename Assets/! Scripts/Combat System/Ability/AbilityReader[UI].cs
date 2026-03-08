@@ -83,6 +83,7 @@ public class AbilityReader : MonoBehaviour
 
     public void FireAbility(Ability ability)
     {
+        abilityHolder.NotifyCooldownChecks(ability);
         Debug.Log(ability.abilityName + " as " + currentCharacter.name);
         List<Character> targets = TargetSetter.SetTarget(currentCharacter, ability);
         StartCoroutine(ability.Execute(currentCharacter, targets));

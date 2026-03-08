@@ -105,6 +105,9 @@ public static class AbilityLibrary
             manaCost = 0;
             targetType = TargetType.SingleAlly;
 
+            cooldownTime = 1;
+            cooldownType = CooldownType.Round;
+
             AbilityLogic = ManaStealLogic;
         }
         public static IEnumerator ManaStealLogic(
