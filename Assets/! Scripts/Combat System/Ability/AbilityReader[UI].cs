@@ -11,6 +11,7 @@ public class AbilityReader : MonoBehaviour
     [SerializeField] private Transform abilityHolderUI;
     [SerializeField] private int abilityAmount;
     private int currentAbilityIndex;
+    bool abilityCurrentlyInUse = false;
     private void Awake()
     {
         EventBus.Sub<TurnStartEvent>(ReadAbility);
@@ -69,6 +70,7 @@ public class AbilityReader : MonoBehaviour
             Button abilityButton = abilityHolderUI.GetChild(i).GetComponent<Button>();
             abilityButton.interactable = false;
         }
+        abilityCurrentlyInUse = true;
     }
 
     private void OpenSelection(AbilityFinishedEvent ev)
@@ -97,6 +99,8 @@ public class AbilityReader : MonoBehaviour
                 abilityHolderUI.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = "";
             }
         }
+
+        abilityCurrentlyInUse = false;
     }
 
     public void FireAbility(TargetSelectedEvent ev)
@@ -117,6 +121,8 @@ public class AbilityReader : MonoBehaviour
 
     private void StopAbility(UnitDeathEvent ev)
     {
-        StopAllCoroutines();
+        //If the current unit dies during his/her action, stop the coroutines. Could be buggy
+        if (ev.unit == currentCharacter && abilityCurrentlyInUse)
+            StopAllCoroutines();
     }
 }
