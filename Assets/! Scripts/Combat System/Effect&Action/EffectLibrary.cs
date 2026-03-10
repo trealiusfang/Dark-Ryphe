@@ -109,7 +109,7 @@ public static class EffectLibrary
             {
                 if (action.actionType == ActionType.DamagePhysical || action.actionType == ActionType.DamageMagic)
                 {
-                    yield return new WaitForSeconds(.35f);
+                    yield return new WaitForSeconds(.25f);
 
                     EffectSystem.ApplyActionImmidiate(new ActionLibrary.CritAction { caster = action.target, target = action.caster, value = action.target.baseStats.power});
                 }

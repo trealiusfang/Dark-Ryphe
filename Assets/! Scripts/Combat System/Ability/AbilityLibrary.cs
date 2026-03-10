@@ -112,7 +112,7 @@ public static class AbilityLibrary
             List<Character> targets, Ability ability)
         {
             EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
-            yield return new WaitForSeconds(0.45f);
+            yield return new WaitForSeconds(0.75f);
 
             foreach (var target in targets)
             {

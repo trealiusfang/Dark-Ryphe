@@ -75,6 +75,7 @@ public class SelectorManager : MonoBehaviour
 
     public void ApplySelectorToGroup(Character caster ,List<Character> targets, CharacterTeam team, SelectorType type)
     {
+        if (caster == null || caster.isDead()) return;
         //apply selector to self
         if (type != SelectorType.Self)
         {
@@ -164,6 +165,8 @@ public class SelectorManager : MonoBehaviour
     {
         selector.SetActive(false);
     }
+
+
 }
 
 [Serializable]

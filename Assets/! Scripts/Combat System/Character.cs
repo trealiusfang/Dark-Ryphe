@@ -35,7 +35,6 @@ public class Character : MonoBehaviour
             if (charEffect.EffectName == effect.EffectName)
             {
                 charEffect.value += effect.value;
-                Debug.Log("Here it is +" + charEffect.value);
                 return;
             }
         }

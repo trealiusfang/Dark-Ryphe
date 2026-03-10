@@ -35,13 +35,13 @@ public class Ability
     {
         EventBus.Raise(new AbilityUsedEvent { caster = caster, ability = this, targets = targets });
         caster.currentStats.currentMana -= manaCost;
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(.10f);
         yield break;
     }
 
     protected virtual IEnumerator PostExecute(Character caster, List<Character> targets)
     {
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(.30f);
         EventBus.Raise(new AbilityFinishedEvent { caster = caster, ability = this });
         yield break;
     }

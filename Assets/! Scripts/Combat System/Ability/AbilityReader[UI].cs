@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class AbilityReader : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class AbilityReader : MonoBehaviour
         EventBus.Sub<AbilityUsedEvent>(LockSelection);
         EventBus.Sub<AbilityFinishedEvent>(OpenSelection);
         EventBus.Sub<TargetSelectedEvent>(FireAbility);
+        EventBus.Sub<UnitDeathEvent>(StopAbility);
     }
     Character currentCharacter;
     List<Ability> abilities;
@@ -111,5 +113,10 @@ public class AbilityReader : MonoBehaviour
         }
 
         StartCoroutine(abilities[currentAbilityIndex].Execute(currentCharacter, targets, abilities[currentAbilityIndex]));
+    }
+
+    private void StopAbility(UnitDeathEvent ev)
+    {
+        StopAllCoroutines();
     }
 }
