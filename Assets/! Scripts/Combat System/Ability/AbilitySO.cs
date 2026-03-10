@@ -5,4 +5,5 @@ using UnityEngine;
 public class AbilitySO : ScriptableObject
 {
     public Sprite abilitySprite;
+    public AudioClip abilitySuccessClip;
 }

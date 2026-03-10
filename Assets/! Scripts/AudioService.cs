@@ -11,7 +11,6 @@ public class AudioService : MonoBehaviour
 
     public void Initialize()
     {
-        DontDestroyOnLoad(gameObject);
 
         EventBus.Sub<SFXEvent>(SFXEventResponder);
         EventBus.Sub<MusicEvent>(MusicEventResponder);

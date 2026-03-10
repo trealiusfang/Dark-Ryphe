@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b904a4074b26e7e4b9fdafe2c9cb1786, type: 3}
   m_Name: Wicked Slash
   m_EditorClassIdentifier: 
-  abilitySprite: {fileID: -8415832801052248410, guid: df0123da9d591d64b96d35ecaa1d1bce, type: 3}
+  abilitySprite: {fileID: 21300000, guid: 2a5c892bdd014164da633b8c6fd0f246, type: 3}
+  abilitySuccessClip: {fileID: 8300000, guid: b4785575a7096104c99c0011ae0e1c8e, type: 3}

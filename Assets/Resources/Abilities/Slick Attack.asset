@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Slick Attack
   m_EditorClassIdentifier: 
   abilitySprite: {fileID: -6141460806656067147, guid: 9db678ef10ba6a740a8943ecf8bbf019, type: 3}
+  abilitySuccessClip: {fileID: 8300000, guid: 7bb58832e0877144e8a360cd41f1e3d9, type: 3}

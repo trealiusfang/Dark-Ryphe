@@ -1,8 +1,8 @@
-using EffectLibrary;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 public static class AbilityLibrary
 {
     public class NullAbility : Ability
@@ -18,7 +18,7 @@ public static class AbilityLibrary
         }
         public static IEnumerator EndTurnLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
             EventBus.Raise(new SFXEvent { sfx_string = "Error Alarm"});
             yield return new WaitForSeconds(0.5f);
@@ -42,9 +42,9 @@ public static class AbilityLibrary
         }
         public static IEnumerator EndTurnLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
-            caster.currentStats.currentMana += caster.baseStats.manaRegen;
+            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, value = caster.baseStats.manaRegen, target = caster});
             yield return new WaitForSeconds(0.3f);
             EventBus.Raise(new TurnEndEvent { unit = caster });
         }
@@ -54,22 +54,46 @@ public static class AbilityLibrary
         public WickedSlash()
         {
             abilityName = "Wicked Slash";
-            manaCost = 3;
+            manaCost = 4;
             targetType = TargetType.SingleEnemy;
+            targetSpots = new short[] { 1, 1, 0, 0 };
 
             AbilityLogic = WickedSlashLogic;
         }
         public static IEnumerator WickedSlashLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
-            EventBus.Raise(new SFXEvent { sfx_string = "Wicked Slice" });
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
             yield return new WaitForSeconds(0.1f);
 
             foreach (var target in targets)
             {
-                EffectSystem.Apply(new DamageEffect(caster, target, caster.baseStats.power));
-                Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(caster.baseStats.power * .75f) + " damage! By: " + caster.name);
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power, caster = caster});
+            }
+        }
+    }
+    public class HeavySlash : Ability
+    {
+        public HeavySlash()
+        {
+            abilityName = "Heavy Slash";
+            manaCost = 4;
+            targetType = TargetType.SingleEnemy;
+            targetSpots = new short[] { 1, 0, 0, 1 };
+
+            AbilityLogic = HeavySlashLogic;
+        }
+        public static IEnumerator HeavySlashLogic(
+            Character caster,
+            List<Character> targets, Ability ability)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            yield return new WaitForSeconds(0.1f);
+
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * 1.5f, caster = caster});
             }
         }
     }
@@ -85,15 +109,14 @@ public static class AbilityLibrary
         }
         public static IEnumerator GasterBlasterLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
-            EventBus.Raise(new SFXEvent { sfx_string = "Gaster Blaster" });
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
             yield return new WaitForSeconds(0.45f);
 
             foreach (var target in targets)
             {
-                EffectSystem.Apply(new DamageEffect(caster, target, Mathf.FloorToInt(caster.baseStats.power * .75f)));
-                Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(caster.baseStats.power * .75f) + " damage! By: " + caster.name);
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * .75f, caster = caster });
             }
         }
     }
@@ -108,21 +131,30 @@ public static class AbilityLibrary
             cooldownTime = 1;
             cooldownType = CooldownType.Round;
 
+            abilityValue = 5;
             AbilityLogic = ManaStealLogic;
         }
         public static IEnumerator ManaStealLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
 
             yield return new WaitForSeconds(0.1f);
 
             foreach (var target in targets)
             {
-                int amount = target.currentStats.currentMana < 5 ? target.currentStats.currentMana : 5;
-                target.currentStats.currentMana -= amount;
-                caster.currentStats.currentMana += amount;
+                EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { target = caster, value = ability.abilityValue, caster = caster });
             }
+        }
+
+        public override bool unitTargetable(Character target)
+        {
+            if (target.currentStats.currentMana > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
     public class ToughenUp : Ability
@@ -130,23 +162,22 @@ public static class AbilityLibrary
         public ToughenUp()
         {
             abilityName = "Toughen Up";
-            manaCost = 3;
+            manaCost = 4;
             targetType = TargetType.Self;
 
             AbilityLogic = ToughenUpLogic;
         }
         public static IEnumerator ToughenUpLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
-            EventBus.Raise(new SFXEvent { sfx_string = "Toughen Up" });
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
             yield return new WaitForSeconds(0.1f);
 
             foreach (var target in targets)
             {
-                target.currentStats.currentHP += 5;
-                target.baseStats.power += 2;
-                Debug.Log(target.charData.name + " was buffed, gained 5 HP and 2 power. By: "+ caster.name);
+                EffectSystem.ApplyAction(new ActionLibrary.Heal { caster = caster, value = 5, target = caster});
+                EffectSystem.ApplyEffect(new EffectLibrary.Power { caster = caster, value = 2, target = caster });
             }
         }
     }
@@ -155,45 +186,68 @@ public static class AbilityLibrary
         public SlickAttack()
         {
             abilityName = "Slick Attack";
-            manaCost = 5;
+            manaCost = 7;
             targetType = TargetType.SingleEnemy;
-            targetSpots = new short[] { 1, 1, 0, 0 };
+            targetSpots = new short[] { 1, 0, 0, 0 };
             AbilityLogic = SlickAttackLogic;
         }
         public static IEnumerator SlickAttackLogic(
             Character caster,
-            List<Character> targets)
+            List<Character> targets, Ability ability)
         {
-            EventBus.Raise(new SFXEvent { sfx_string = "Slick Attack" });
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
             yield return new WaitForSeconds(0.1f);
 
             foreach (var target in targets)
             {
-                EffectSystem.Apply(new DamageEffect(caster, target, Mathf.FloorToInt(caster.baseStats.power * 1.2f)));
-                Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(caster.baseStats.power * .75f) + " damage! By: " + caster.name);
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * 1.5f, caster = caster });
             }
         }
     }
 
-    public static Ability stringToAbility(string abilityName)
+    public class DaringStep : Ability
     {
-        switch (abilityName)
+        public DaringStep()
         {
-            case "End Turn":
-                return new EndTurn();
-            case "Wicked Slash":
-                return new WickedSlash();
-            case "Gaster Blaster":
-                return new GasterBlaster();
-            case "Mana Steal":
-                return new ManaSteal();
-            case "Toughen Up":
-                return new ToughenUp();
-            case "Slick Attack":
-                return new SlickAttack();
-            default: return new NullAbility();
+            abilityName = "Daring Step";
+            manaCost = 5;
+            targetType = TargetType.Self;
+            cooldownTime = 1;
+            cooldownType = CooldownType.Combat;
 
+            AbilityLogic = _AbilityLogic;
         }
+        public static IEnumerator _AbilityLogic(
+            Character caster,
+            List<Character> targets, Ability ability)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            yield return new WaitForSeconds(4f);
+
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyEffect(new EffectLibrary.Riposte { caster = caster, target = target});
+            }
+        }
+    }//stringToAbility
+
+    public static Ability StringToAbility(string abilityName)
+    {
+        abilityName = abilityName.Replace(" ", "");
+
+        string fullName = $"AbilityLibrary+{abilityName}";
+        var type = Type.GetType(fullName);
+
+        if (type == null)
+            return new NullAbility();
+
+        if (!typeof(Ability).IsAssignableFrom(type))
+            return new NullAbility();
+
+        if (type.IsAbstract)
+            return new NullAbility();
+
+        return (Ability)Activator.CreateInstance(type);
     }
 }
 

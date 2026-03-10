@@ -21,6 +21,13 @@ public class TurnStartEvent : EventData
     public Character unit;
 }
 
+public class AbilitySelectedEvent : EventData
+{
+    public Character unit;
+    public Ability ability;
+    public List<Character> targets;
+}
+
 public class AbilityUsedEvent : EventData
 {
     public Character caster;
@@ -32,6 +39,11 @@ public class AbilityFinishedEvent : EventData
     public Character caster;
     public Ability ability;
     public List<Character> targets;
+}
+
+public class TargetSelectedEvent : EventData
+{
+    public Character target;
 }
 
 public class DamageEvent : EventData
@@ -60,6 +72,13 @@ public class MusicEvent : EventData
 {
     public string music_string;
     public AudioClip music_clip;
+}
+
+public class BattleTextEvent : EventData
+{
+    public string text;
+    public Vector2 position;
+    public TextAnimType textAnimType;
 }
 
 

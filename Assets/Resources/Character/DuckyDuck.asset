@@ -16,13 +16,13 @@ MonoBehaviour:
   charSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   characterStats:
     maxHP: 30
-    maxMana: 5
+    maxMana: 10
     manaRegen: 10
-    speed: 4
-    power: 2
+    speed: 1
+    power: 3
     luck: 3
   Abilities:
-  - {fileID: 11400000, guid: 20016cec031559c43a398eb130ec35c7, type: 2}
+  - {fileID: 11400000, guid: 8db67a4fc72cded45a14814a33831d3d, type: 2}
   - {fileID: 11400000, guid: afd47aea436a26a42afa404cb8f80892, type: 2}
   - {fileID: 11400000, guid: 0513213ce96b09e4d9e1faaee433f99d, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}

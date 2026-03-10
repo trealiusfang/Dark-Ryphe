@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +9,13 @@ public class AbilityReader : MonoBehaviour
 {
     [SerializeField] private Transform abilityHolderUI;
     [SerializeField] private int abilityAmount;
+    private int currentAbilityIndex;
     private void Awake()
     {
         EventBus.Sub<TurnStartEvent>(ReadAbility);
         EventBus.Sub<AbilityUsedEvent>(LockSelection);
         EventBus.Sub<AbilityFinishedEvent>(OpenSelection);
+        EventBus.Sub<TargetSelectedEvent>(FireAbility);
     }
     Character currentCharacter;
     List<Ability> abilities;
@@ -39,7 +42,20 @@ public class AbilityReader : MonoBehaviour
         {
             if (abilityHolderUI.GetChild(i).GetComponent<Button>() == button && abilities.Count > i)
             {
-                FireAbility(abilities[i]);
+                currentAbilityIndex = i;
+                if (abilities[i].abilityName != "End Turn")
+                {
+                    List<Character> targets = TargetSetter.SetTarget(currentCharacter, abilities[i]);
+                    EventBus.Raise(new AbilitySelectedEvent
+                    {
+                        unit = currentCharacter,
+                        ability = abilities[i],
+                        targets = targets
+                    });
+                } else
+                {
+                    FireAbility(new TargetSelectedEvent { target = currentCharacter});
+                }
             }
         }
     }
@@ -81,11 +97,19 @@ public class AbilityReader : MonoBehaviour
         }
     }
 
-    public void FireAbility(Ability ability)
+    public void FireAbility(TargetSelectedEvent ev)
     {
-        abilityHolder.NotifyCooldownChecks(ability);
-        Debug.Log(ability.abilityName + " as " + currentCharacter.name);
-        List<Character> targets = TargetSetter.SetTarget(currentCharacter, ability);
-        StartCoroutine(ability.Execute(currentCharacter, targets));
+        Character target = ev.target;
+
+        abilityHolder.NotifyCooldownChecks(abilities[currentAbilityIndex]);
+        Debug.Log(abilities[currentAbilityIndex].abilityName + " as " + currentCharacter.name);
+        List<Character> targets = TargetSetter.SetTarget(currentCharacter, abilities[currentAbilityIndex]);
+
+        if (abilities[currentAbilityIndex].targetType == TargetType.SingleEnemy || abilities[currentAbilityIndex].targetType == TargetType.SingleAlly)
+        {
+            targets = new List<Character> {  target };
+        }
+
+        StartCoroutine(abilities[currentAbilityIndex].Execute(currentCharacter, targets, abilities[currentAbilityIndex]));
     }
 }

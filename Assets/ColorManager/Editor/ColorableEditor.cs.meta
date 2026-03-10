@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ef904dc7403967145a60cc523f534e6e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210519
+  packageName: Color Manager
+  packageVersion: 1.0
+  assetPath: Assets/ColorManager/Editor/ColorableEditor.cs
+  uploadId: 473134

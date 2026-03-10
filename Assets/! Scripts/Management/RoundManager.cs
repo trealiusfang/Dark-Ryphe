@@ -5,7 +5,7 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour
 {
     private Queue<Character> turnQueue = new();
-
+    private Character currentUnit;
     void Awake()
     {
         EventBus.Sub<CombatStartEvent>(OnCombatStart);
@@ -26,7 +26,7 @@ public class TurnManager : MonoBehaviour
         if (units.Length == 0) { Debug.Log("There isn't anybody"); }
 
         var ordered = units
-            .OrderByDescending(u => u.baseStats.speed + Random.Range(1, 8));
+            .OrderByDescending(u => u.baseStats.speed);
 
         turnQueue = new Queue<Character>(ordered);
     }
@@ -38,12 +38,12 @@ public class TurnManager : MonoBehaviour
             Debug.Log("New Round");
             BuildTurnQueue();
         }
-        Character unit = turnQueue.Dequeue();
-        Debug.Log("Now arrives: " + unit.name);
+        currentUnit = turnQueue.Dequeue();
+        Debug.Log("Now arrives: " + currentUnit.name);
 
         yield return new WaitForSeconds(0.5f); //wait a lil before next guy
 
-        EventBus.Raise(new TurnStartEvent { unit = unit });
+        EventBus.Raise(new TurnStartEvent { unit = currentUnit });
     }
 
     void OnTurnEnd(TurnEndEvent ev)
@@ -53,9 +53,15 @@ public class TurnManager : MonoBehaviour
 
     void RemoveDeadUnit(UnitDeathEvent ev)
     {
-        List<Character> units = turnQueue.ToList();
-        units.Remove(ev.unit);
+        if (ev.unit ==  currentUnit)
+        {
+            StartCoroutine(StartNextTurn());
+        } else
+        {
+            List<Character> units = turnQueue.ToList();
+            units.Remove(ev.unit);
 
-        turnQueue = new Queue<Character>(units);
+            turnQueue = new Queue<Character>(units);
+        }
     }
 }

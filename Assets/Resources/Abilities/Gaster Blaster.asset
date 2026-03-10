@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b904a4074b26e7e4b9fdafe2c9cb1786, type: 3}
   m_Name: Gaster Blaster
   m_EditorClassIdentifier: 
+  abilitySprite: {fileID: 0}
+  abilitySuccessClip: {fileID: 8300000, guid: a4a32a8a952f8dd4a9a77cda84b851a9, type: 3}

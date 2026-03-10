@@ -303,22 +303,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SFX:
-  - Name: Gaster Blaster
-    clip: {fileID: 8300000, guid: a4a32a8a952f8dd4a9a77cda84b851a9, type: 3}
-  - Name: Yunara Attack
-    clip: {fileID: 8300000, guid: de3a983fbd402ca43b29e2569210c080, type: 3}
   - Name: Error Alarm
     clip: {fileID: 8300000, guid: b8f61978a42cfa343a49e915cebf6f17, type: 3}
-  - Name: Wicked Slice
-    clip: {fileID: 8300000, guid: b4785575a7096104c99c0011ae0e1c8e, type: 3}
-  - Name: Toughen Up
-    clip: {fileID: 8300000, guid: 9ae60d47e18b8b14c804df0b5410aabd, type: 3}
-  - Name: Slick Attack
-    clip: {fileID: 8300000, guid: 7bb58832e0877144e8a360cd41f1e3d9, type: 3}
+  - Name: Win
+    clip: {fileID: 8300000, guid: 6d2e37136ee8f664d8176dcbb484a183, type: 3}
+  - Name: Critical
+    clip: {fileID: 8300000, guid: d7966e3de9cd69d4aa8460dae120df28, type: 3}
   Music:
   - Name: Summer Solstice
     clip: {fileID: 8300000, guid: 63a18a5479e3b4050aca04ef5f34f401, type: 3}
   - Name: Battle Theme
     clip: {fileID: 8300000, guid: 457771d0864a67842a71c2fb0a3fdc1a, type: 3}
+  - Name: Swaying Daises
+    clip: {fileID: 8300000, guid: d09fa46398af0499b8e39053d5dfd238, type: 3}
   SFXSource: {fileID: 7410224517492786657}
   MusicSource: {fileID: 6631120878078769140}

@@ -9,7 +9,7 @@ public class Ability
 
     //Set in abilitySO
     public Sprite sprite = null;
-
+    public AudioClip abilitySuccessClip = null;
     //Conditions
     public short manaCost = 4;
     public TargetType targetType;
@@ -18,21 +18,22 @@ public class Ability
 
     public short[] activasionSpots = {1,1,1,1};
     public short[] targetSpots = {1,1,1,1};
+    public int abilityValue = 1;
 
-    public Func<Character, List<Character>, IEnumerator> AbilityLogic;
-    public virtual IEnumerator Execute(Character caster, List<Character> targets)
+    public Func<Character, List<Character>, Ability, IEnumerator> AbilityLogic;
+    public virtual IEnumerator Execute(Character caster, List<Character> targets, Ability ability = null)
     {
         yield return PreExecute(caster, targets);
 
         if (AbilityLogic != null)
-            yield return AbilityLogic(caster, targets);
+            yield return AbilityLogic(caster, targets, ability);
 
         yield return PostExecute(caster, targets);
     }
 
     protected virtual IEnumerator PreExecute(Character caster, List<Character> targets)
     {
-        EventBus.Raise(new AbilityUsedEvent { caster = caster, ability = this });
+        EventBus.Raise(new AbilityUsedEvent { caster = caster, ability = this, targets = targets });
         caster.currentStats.currentMana -= manaCost;
         yield return new WaitForSeconds(.15f);
         yield break;
@@ -47,7 +48,11 @@ public class Ability
 
 
     //If an ability requires certain conditions other than base conditions, they can be overriden here.
-    public virtual bool abilityCastable()
+    public virtual bool abilityCastable(Character caster)
+    {
+        return true;
+    }
+    public virtual bool unitTargetable(Character target)
     {
         return true;
     }
@@ -57,7 +62,7 @@ public enum CooldownType
 {
     None,
     Round,
-    Match
+    Combat
 }
 
 public enum TargetType

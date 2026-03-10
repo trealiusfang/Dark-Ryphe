@@ -63,7 +63,11 @@ public class GameInitializer : MonoBehaviour
     {
         _mainCamera.transform.parent = Forced.transform;
         _loadingScreen.transform.SetParent(UI.transform);
-        for (int i = 0; i < UI.transform.childCount; i++) { UI.transform.GetChild(i).GetComponent<Canvas>().worldCamera = _mainCamera; }
+        for (int i = 0; i < UI.transform.childCount; i++) 
+        { 
+            if (UI.transform.GetChild(i).GetComponent<Canvas>() != null)
+            UI.transform.GetChild(i).GetComponent<Canvas>().worldCamera = _mainCamera;
+        }
     }
 
     private async UniTask BeginGame()

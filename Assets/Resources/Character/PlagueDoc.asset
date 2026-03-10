@@ -23,4 +23,5 @@ MonoBehaviour:
     luck: 4
   Abilities:
   - {fileID: 11400000, guid: 20016cec031559c43a398eb130ec35c7, type: 2}
+  - {fileID: 11400000, guid: e32221a41d684b849a10e7159edb0f82, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}

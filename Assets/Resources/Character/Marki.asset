@@ -17,9 +17,9 @@ MonoBehaviour:
   characterStats:
     maxHP: 40
     maxMana: 15
-    manaRegen: 2
+    manaRegen: 10
     speed: 3
-    power: 2
+    power: 8
     luck: -5
   Abilities:
   - {fileID: 11400000, guid: afd47aea436a26a42afa404cb8f80892, type: 2}

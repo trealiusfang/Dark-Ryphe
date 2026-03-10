@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 533d50c8cd0be6c41a5279802c8601b4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 210519
+  packageName: Color Manager
+  packageVersion: 1.0
+  assetPath: Assets/ColorManager/Scripts/IColorable.cs
+  uploadId: 473134

@@ -16,8 +16,9 @@ public class AbilityHolder : MonoBehaviour
         character = GetComponent<Character>();
         for (int i = 0; i < Abilities.Count; i++)
         {
-            allAbilities.Add(AbilityLibrary.stringToAbility(Abilities[i].name));
+            allAbilities.Add(AbilityLibrary.StringToAbility(Abilities[i].name));
             allAbilities[i].sprite = Abilities[i].abilitySprite;
+            allAbilities[i].abilitySuccessClip = Abilities[i].abilitySuccessClip;
         }
 
         EventBus.Sub<TurnEndEvent>(LowerCooldown);
@@ -39,7 +40,7 @@ public class AbilityHolder : MonoBehaviour
             return false;
         }
         //Ability specific condition
-        if (!ability.abilityCastable())
+        if (!ability.abilityCastable(character))
         {
             return false;
         }
@@ -101,7 +102,7 @@ public class AbilityHolder : MonoBehaviour
     {
         foreach (AbilityCooldownHandling cooldownHandling in cooldownHandlings)
         {
-            if (cooldownHandling.cooldownType == CooldownType.Match)
+            if (cooldownHandling.cooldownType == CooldownType.Combat)
             {
                 if (cooldownHandling.cooldownTime > 0)
                     cooldownHandling.cooldownTime--;
