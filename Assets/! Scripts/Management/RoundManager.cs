@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
-public class TurnManager : MonoBehaviour
+public class TurnManager : BusRoute
 {
     private Queue<Character> turnQueue = new();
     private Character currentUnit;
     void Awake()
     {
-        EventBus.Sub<CombatStartEvent>(OnCombatStart);
-        EventBus.Sub<TurnEndEvent>(OnTurnEnd);
-        EventBus.Sub<UnitDeathEvent>(RemoveDeadUnit);
+        Sub<CombatStartEvent>(OnCombatStart);
+        Sub<TurnEndEvent>(OnTurnEnd);
+        Sub<UnitDeathEvent>(RemoveDeadUnit);
     }
 
     void OnCombatStart(CombatStartEvent e)

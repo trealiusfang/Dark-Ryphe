@@ -4,9 +4,8 @@ using TMPro;
 using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
-public class AbilityReader : MonoBehaviour
+public class AbilityReader : BusRoute
 {
     [SerializeField] private Transform abilityHolderUI;
     [SerializeField] private int abilityAmount;
@@ -14,11 +13,11 @@ public class AbilityReader : MonoBehaviour
     bool abilityCurrentlyInUse = false;
     private void Awake()
     {
-        EventBus.Sub<TurnStartEvent>(ReadAbility);
-        EventBus.Sub<AbilityUsedEvent>(LockSelection);
-        EventBus.Sub<AbilityFinishedEvent>(OpenSelection);
-        EventBus.Sub<TargetSelectedEvent>(FireAbility);
-        EventBus.Sub<UnitDeathEvent>(StopAbility);
+        Sub<TurnStartEvent>(ReadAbility);
+        Sub<AbilityUsedEvent>(LockSelection);
+        Sub<AbilityFinishedEvent>(OpenSelection);
+        Sub<TargetSelectedEvent>(FireAbility);
+        Sub<UnitDeathEvent>(StopAbility);
     }
     Character currentCharacter;
     List<Ability> abilities;

@@ -145,6 +145,7 @@ public class EffectSystem : MonoBehaviour
 
     public static void ApplyEffect(Effect effect)
     {
+        Debug.Log(effect.EffectName + " has been applied to: " + effect.target);
         effect.target.AddEffect(effect);
         GameInitializer.instance.StartCoroutine(effect.OnApply(effect.target, effect.value));
     }

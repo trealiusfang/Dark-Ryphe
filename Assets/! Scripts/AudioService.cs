@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AudioService : MonoBehaviour
+public class AudioService : BusRoute
 {
     public AudioAndName[] SFX, Music;
     public AudioSource SFXSource, MusicSource;
 
     public void Initialize()
     {
-
-        EventBus.Sub<SFXEvent>(SFXEventResponder);
-        EventBus.Sub<MusicEvent>(MusicEventResponder);
+        SubnApply<SFXEvent>(SFXEventResponder);
+        SubnApply<MusicEvent>(MusicEventResponder);
     }
 
     private void SFXEventResponder(SFXEvent ev)

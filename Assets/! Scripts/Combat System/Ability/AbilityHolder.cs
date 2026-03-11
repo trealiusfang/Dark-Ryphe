@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityHolder : MonoBehaviour
+public class AbilityHolder : BusRoute
 {
     private List<Ability> allAbilities = new List<Ability>();
     private List<Ability> activeAbilities = new List<Ability>();
@@ -11,7 +11,7 @@ public class AbilityHolder : MonoBehaviour
     List<AbilityCooldownHandling> cooldownHandlings = new List<AbilityCooldownHandling>();
 
     private Character character;
-    private void Start()
+    private void Awake()
     {
         character = GetComponent<Character>();
         for (int i = 0; i < Abilities.Count; i++)
@@ -21,8 +21,8 @@ public class AbilityHolder : MonoBehaviour
             allAbilities[i].abilitySuccessClip = Abilities[i].abilitySuccessClip;
         }
 
-        EventBus.Sub<TurnEndEvent>(LowerCooldown);
-        EventBus.Sub<CombatEndEvent>(LowerCooldown);
+        Sub<TurnEndEvent>(LowerCooldown);
+        Sub<CombatEndEvent>(LowerCooldown);
 
         activeAbilities = allAbilities;
     }
@@ -100,13 +100,27 @@ public class AbilityHolder : MonoBehaviour
     }
     private void LowerCooldown(CombatEndEvent ev)
     {
+        List<AbilityCooldownHandling> removedHandlings = new List<AbilityCooldownHandling>();
+
         foreach (AbilityCooldownHandling cooldownHandling in cooldownHandlings)
         {
             if (cooldownHandling.cooldownType == CooldownType.Combat)
             {
                 if (cooldownHandling.cooldownTime > 0)
+                {
                     cooldownHandling.cooldownTime--;
+
+                    if (cooldownHandling.cooldownTime == 0)
+                    {
+                        removedHandlings.Add(cooldownHandling);
+                    }
+                }
             }
+        }
+
+        foreach (AbilityCooldownHandling removedHandling in removedHandlings)
+        {
+            cooldownHandlings.Remove(removedHandling);
         }
     }
 

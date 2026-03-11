@@ -4,19 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectorManager : MonoBehaviour
+public class SelectorManager : BusRoute
 {
     public GameObject selectorPrefab;
     public Transform activeSelectors;
     private List<CharactersAndSelectors> CharactersAndSelectors = new List<CharactersAndSelectors>();
     [SerializeField] private Vector2 offset;
-    public void Start()
+    public void Awake()
     {
-        EventBus.Sub<UnitDeathEvent>(OnUnitDeath);
-        EventBus.Sub<AbilitySelectedEvent>(AbilitySelected);
-        EventBus.Sub<AbilityUsedEvent>(OnAbilityUsed);
-        EventBus.Sub<TurnStartEvent>(OnTurnStart);
-        EventBus.Sub<AbilityFinishedEvent>(AfterAbilityUsed);
+        Sub<UnitDeathEvent>(OnUnitDeath);
+        Sub<AbilitySelectedEvent>(AbilitySelected);
+        Sub<AbilityUsedEvent>(OnAbilityUsed);
+        Sub<TurnStartEvent>(OnTurnStart);
+        Sub<AbilityFinishedEvent>(AfterAbilityUsed);
     }
 
     private void OnTurnStart(TurnStartEvent ev)

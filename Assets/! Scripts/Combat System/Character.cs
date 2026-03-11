@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Playables;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : BusRoute
 {
     public CharacterData charData;
     public CharacterTeam Team;
@@ -26,6 +26,9 @@ public class Character : MonoBehaviour
 
         currentStats.currentHP = baseStats.maxHP;
         currentStats.currentMana = baseStats.maxMana;
+        //make a different class for effects
+        Sub<TurnEndEvent>(LowerEffectCooldown);
+        Sub<CombatEndEvent>(LowerEffectCooldown);
     }
 
     public void AddEffect(Effect effect)
@@ -35,14 +38,60 @@ public class Character : MonoBehaviour
             if (charEffect.EffectName == effect.EffectName)
             {
                 charEffect.value += effect.value;
+                Debug.Log("Effect value increase");
                 return;
             }
         }
-
-        EventBus.Sub<TurnStartEvent>(effect.OnTurnStart);
-        EventBus.Sub<TurnEndEvent>(effect.OnTurnEnd);
+        SubnApply<TurnStartEvent>(effect.OnTurnStart);
+        SubnApply<TurnEndEvent>(effect.OnTurnEnd);
 
         effects.Add(effect);
+    }
+
+    private void LowerEffectCooldown(TurnEndEvent ev)
+    {
+        if (ev.unit == this)
+        {
+            List<Effect> removals = new List<Effect>();
+            foreach (Effect charEffect in effects)
+            {
+                if (charEffect.durationType == EffectDuration.Round)
+                {
+                    charEffect.duration--;
+
+                    if (charEffect.duration <= 0)
+                    {
+                        removals.Add(charEffect);
+                    }
+                }
+            }
+
+            foreach (Effect effect in removals)
+            {
+                effects.Add(effect);
+            }
+        }
+    }
+    private void LowerEffectCooldown(CombatEndEvent ev)
+    {
+        List<Effect> removals = new List<Effect>();
+        foreach (Effect charEffect in effects)
+        {
+            if (charEffect.durationType == EffectDuration.Combat)
+            {
+                charEffect.duration--;
+
+                if (charEffect.duration <= 0)
+                {
+                    removals.Add(charEffect);
+                }
+            }
+        }
+
+        foreach (Effect effect in removals)
+        {
+            effects.Add(effect);
+        }
     }
 
     public void TakeDamage(int dmg)

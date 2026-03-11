@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour
+public class CombatManager : BusRoute
 {
     List<Character> Lights, Darks;
     public void StartCombat()
@@ -22,8 +22,8 @@ public class CombatManager : MonoBehaviour
 
     private void Start()
     {
-        EventBus.Sub<CombatEndEvent>(EndCombat);
-        EventBus.Sub<UnitDeathEvent>(OnDeath);
+        SubnApply<CombatEndEvent>(EndCombat);
+        SubnApply<UnitDeathEvent>(OnDeath);
     }
     private void SetTeams()
     {

@@ -1,41 +1,52 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class BusRoute : MonoBehaviour
+public abstract class BusRoute : MonoBehaviour
 {
-    /*
-    private static List<EventData> assignedTypes = new();
-    private static List<Delegate> assignedActions = new();
-    public static void Sub<T>(Action<T> action) where T : EventData
+    private List<(Type type, Delegate action)> routes = new();
+
+    protected void Sub<T>(Action<T> action) where T : EventData
     {
-        Type type = typeof(T);
-
-        assignedTypes.Add(typeof(T));
-        assignedActions.Add(action);
-
-        EventBus.Sub<T>(action);
+        routes.Add((typeof(T), action));
     }
-    public static void UnSub<T>(Action<T> action) where T : EventData
+    protected void SubnApply<T>(Action<T> action) where T : EventData
     {
-        Type type = typeof(T);
-
-        assignedTypes.Remove(type);
-        assignedActions.Remove(action);
-
-        EventBus.UnSub<T>(action);
+        routes.Add((typeof(T), action));
+        EventBus.Sub(action);
     }
 
-    public virtual void OnEnable()
+    protected void UnSub<T>(Action<T> action) where T : EventData
     {
-        for (int i = 0; i < assignedActions.Count; i++)
+        routes.RemoveAll(r => r.type == typeof(T) && r.action.Equals(action));
+    }
+    protected void UnSubnApply<T>(Action<T> action) where T : EventData
+    {
+        routes.RemoveAll(r => r.type == typeof(T) && r.action.Equals(action));
+        EventBus.UnSub(action);
+    }
+
+    protected virtual void OnEnable()
+    {
+        foreach (var route in routes)
         {
-            Delegate del = assignedActions[i];
-            
-            EventBus.AddDictionary<Type>(del);
+            var method = typeof(EventBus)
+                .GetMethod(nameof(EventBus.Sub))
+                .MakeGenericMethod(route.type);
+
+            method.Invoke(null, new object[] { route.action });
         }
     }
-    */
+
+    protected virtual void OnDisable()
+    {
+        foreach (var route in routes)
+        {
+            var method = typeof(EventBus)
+                .GetMethod(nameof(EventBus.UnSub))
+                .MakeGenericMethod(route.type);
+
+            method.Invoke(null, new object[] { route.action });
+        }
+    }
 }

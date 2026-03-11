@@ -36,27 +36,4 @@ public static class EventBus
             assignedActions[type] = Delegate.Remove(assignedActions[type], action);
         }
     }
-
-    /*public static void AddDictionary<T>(Delegate action) where T : Type
-    {
-        Type type = typeof(T);
-
-        if (assignedActions.ContainsKey(type))
-        {
-            assignedActions[type] = Delegate.Combine(assignedActions[type], action);
-        }
-        else
-        {
-            assignedActions[type] = action;
-        }
-    }
-    public static void RemoveDictionary<T>(Delegate action)
-    {
-        Type type = typeof(T);
-
-        if (assignedActions.ContainsKey(type))
-        {
-            assignedActions[type] = Delegate.Remove(assignedActions[type], action);
-        }
-    } */
 }

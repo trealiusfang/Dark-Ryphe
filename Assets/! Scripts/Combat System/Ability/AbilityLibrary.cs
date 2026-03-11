@@ -229,8 +229,32 @@ public static class AbilityLibrary
                 EffectSystem.ApplyEffect(new EffectLibrary.Riposte { caster = caster, target = target});
             }
         }
-    }//stringToAbility
+    }
 
+    public class ChemicalThrow : Ability
+    {
+        public ChemicalThrow()
+        {
+            abilityName = "Chemical Throw";
+            manaCost = 6;
+            targetType = TargetType.AoEEnemy;
+            abilityValue = 3;
+            targetSpots = new short[] { 1, 1, 0, 0 };
+            AbilityLogic = _AbilityLogic;
+        }
+        public static IEnumerator _AbilityLogic(
+            Character caster,
+            List<Character> targets, Ability ability)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            yield return new WaitForSeconds(.7f);
+
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyEffect(new EffectLibrary.Venom { caster = caster, target = target, value = ability.abilityValue, duration = 3, durationType = EffectDuration.Round });
+            }
+        }
+    }
     public static Ability StringToAbility(string abilityName)
     {
         abilityName = abilityName.Replace(" ", "");

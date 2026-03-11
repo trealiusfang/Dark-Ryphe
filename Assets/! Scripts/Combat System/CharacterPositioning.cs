@@ -4,12 +4,12 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
-public class CharacterPositioning : MonoBehaviour
+public class CharacterPositioning : BusRoute
 {
     private void Awake()
     {
-        EventBus.Sub<CombatStartEvent>(OnStart);
-        EventBus.Sub<UnitDeathEvent>(OnDeath);
+        Sub<CombatStartEvent>(OnStart);
+        Sub<UnitDeathEvent>(OnDeath);
     }
     List<Character> Lights;
     List<Character> Darks;

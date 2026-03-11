@@ -116,4 +116,28 @@ public static class EffectLibrary
             }
         }
     }
+
+    public class Venom : Effect
+    {
+        public Venom()
+        {
+            EffectName = "Venom";
+
+            ApplyEffects = OnApply;
+            durationType = EffectDuration.Round;
+        }
+        public override IEnumerator OnApply(Character target, float value)
+        {
+            EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+"+ value + " VENOM", textAnimType = TextAnimType.Venom });
+            yield return null;
+        }
+
+        public override void OnTurnStart(TurnStartEvent ev)
+        {
+            if (ev.unit == target)
+            {
+                EffectSystem.ApplyAction(new ActionLibrary.VenomDamage { target = ev.unit, value = value, caster = caster });
+            }
+        }
+    }
 }

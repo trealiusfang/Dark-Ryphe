@@ -5,11 +5,11 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class BattleTextManager : MonoBehaviour
+public class BattleTextManager : BusRoute
 {
-    private void Start()
+    private void Awake()
     {
-        EventBus.Sub<BattleTextEvent>(BattleTextEvent);
+        Sub<BattleTextEvent>(BattleTextEvent);
     }
     public TextAnimation ko;
     public TextAnimation lvlUp;
