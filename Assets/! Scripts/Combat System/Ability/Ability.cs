@@ -14,7 +14,7 @@ public class Ability
     public short manaCost = 4;
     public TargetType targetType;
     public CooldownType cooldownType;
-    public short cooldownTime = 0;
+    public short cooldownTime = 0; //Cooldown time is lowered by CharacterScript, if you want a custom behaviour, free feel to add the condition on CharacterScript and apply the behaviour on the ability.
 
     public short[] activasionSpots = {1,1,1,1};
     public short[] targetSpots = {1,1,1,1};
@@ -62,7 +62,8 @@ public enum CooldownType
 {
     None,
     Round,
-    Combat
+    Combat,
+    Custom
 }
 
 public enum TargetType

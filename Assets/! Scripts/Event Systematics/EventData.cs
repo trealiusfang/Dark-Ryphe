@@ -44,6 +44,7 @@ public class AbilityFinishedEvent : EventData
 public class TargetSelectedEvent : EventData
 {
     public Character target;
+    public Ability bindedAbility;
 }
 
 public class DamageEvent : EventData
