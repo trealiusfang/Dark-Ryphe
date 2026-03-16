@@ -20,7 +20,7 @@ public static class ActionLibrary
             target.TakeDamage(Mathf.FloorToInt(value));
             Debug.Log(target.charData.name + " was attacked, lost " + value + " health! By: " + (caster != null ? caster.name : ""));
             //Call effects
-            EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), position = target.transform.position, textAnimType = TextAnimType.Damage });
+            EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), character = target, textAnimType = TextAnimType.Damage });
             yield return null;
         }
     }
@@ -41,7 +41,7 @@ public static class ActionLibrary
             Debug.Log(target.charData.name + " was attacked, lost " + value + " health! By: " + (caster != null ? caster.name : ""));
             //Call effects
             EventBus.Raise(new SFXEvent { sfx_string = "Critical" });
-            EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value * 1.5f), position = target.transform.position, textAnimType = TextAnimType.Critical });
+            EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value * 1.5f), character = target, textAnimType = TextAnimType.Critical });
             yield return null;
         }
     }
@@ -61,7 +61,7 @@ public static class ActionLibrary
             target.TakeDamage(Mathf.FloorToInt(value));
             Debug.Log(target.charData.name + " lost " + value + " health, by venom!");
             //Call effects
-            EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), position = target.transform.position, textAnimType = TextAnimType.Venom });
+            EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), character = target, textAnimType = TextAnimType.Venom });
             yield return null;
         }
 
@@ -84,7 +84,7 @@ public static class ActionLibrary
 
             Debug.Log(target.name + " gained " + value + " mana!");
             //Call effects
-            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " MANA", position = target.transform.position, textAnimType = TextAnimType.Freeze });
+            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " MANA", character = target, textAnimType = TextAnimType.Freeze });
             yield return null;
         }
     }
@@ -106,7 +106,47 @@ public static class ActionLibrary
             Debug.Log(caster.name + " gained " + actualValue + " HP!");
             //Call effects
 
-            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " HP", position = target.transform.position, textAnimType = TextAnimType.Heal });
+            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " HP", character = target, textAnimType = TextAnimType.Heal });
+            yield return null;
+        }
+    }
+    public class Pray : Action
+    {
+        public Pray()
+        {
+            actionType = ActionType.StatIncreaseLuck;
+
+            ActionLogic = newActionLogic;
+        }
+
+        public static IEnumerator newActionLogic(Character caster, Character target, float value)
+        {
+            float actualValue = (target.baseStats.luck + value) < 0 ? -target.baseStats.luck : value;
+
+            target.baseStats.luck += (short)Mathf.FloorToInt(actualValue);
+
+            Debug.Log(target.name + " gained " + value + " luck!");
+            //Call effects
+            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " Luck", character = target, textAnimType = TextAnimType.Shock });
+            yield return null;
+        }
+    }
+
+    public class SpendOrEarnMoney : Action
+    {
+        public SpendOrEarnMoney()
+        {
+            actionType = ActionType.None;
+
+            ActionLogic = newActionLogic;
+        }
+
+        public static IEnumerator newActionLogic(Character caster, Character target, float value)
+        {
+            if (value < 0)
+            EventBus.Raise(new BattleTextEvent { text = "-" + Mathf.FloorToInt(Mathf.Abs(value)) + " Money", character = target, textAnimType = TextAnimType.Metallic });
+            if (value > 0)
+            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(value) + " Money", character = target, textAnimType = TextAnimType.Premium });
             yield return null;
         }
     }

@@ -27,11 +27,11 @@ public class GameInitializer : MonoBehaviour
             await CreateObjects();
             loadingScreenDisposible.SetLoadingBarPercent(.66f);
             PrepareGame();
-            loadingScreenDisposible.SetLoadingBarPercent(1f);
             await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
+            await BeginGame();
+            loadingScreenDisposible.SetLoadingBarPercent(1f);
         }
 
-        await BeginGame();
     }
 
     private void BindObjects()
@@ -73,7 +73,7 @@ public class GameInitializer : MonoBehaviour
     private async UniTask BeginGame()
     {
         _audioService.PlayMusic("Battle Theme");
-        await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
         _combatManagers.GetComponent<CombatManager>().StartCombat();
+        await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
     }
 }

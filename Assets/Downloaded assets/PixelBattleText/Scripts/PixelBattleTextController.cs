@@ -89,7 +89,7 @@ namespace PixelBattleText
 			singleton._DisplayText(word, textAnimation, position);
 		}
 
-		private void _DisplayText(string word, TextAnimation textAnimation, Vector2 position)
+		private void _DisplayText(string word, TextAnimation textAnimation, Vector3 position)
 		{
 #if UNITY_EDITOR
 			if(!canvas)
@@ -98,11 +98,16 @@ namespace PixelBattleText
 				return;
 			}
 #endif
-
-			position.x *= canvas.rect.width;
-			position.y *= canvas.rect.height;
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(new Vector3(position.x, position.y, position.z + 20)); 
 			
-			Transform[] letterTransforms = new Transform[word.Length];
+			if (screenPoint.z < 0) return; 
+			
+			Vector2 canvasPos; 
+			RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform.parent.GetComponent<RectTransform>(), screenPoint, 
+				Camera.main, out canvasPos ); 
+			canvasPos += canvas.rect.size * 0.5f; position = canvasPos;
+
+            Transform[] letterTransforms = new Transform[word.Length];
 			TMP_Text[][] wordGraphics = new TMP_Text[word.Length][];
 			for (int i = 0; i < word.Length; i++)
 			{
@@ -146,7 +151,7 @@ namespace PixelBattleText
 				letters = wordGraphics,
 				props = textAnimation,
 				startTime = Time.time,
-				pos = (position + new Vector2(alignmentOffset, 0)),
+				pos = (position + new Vector3(alignmentOffset, 0)),
 				active = false,
 			};
 

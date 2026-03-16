@@ -27,44 +27,28 @@ public class CombatManager : BusRoute
     }
     private void SetTeams()
     {
-        Character[] units = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        CharacterLister lister = GameInitializer.instance._combatManagers.GetComponent<CharacterLister>();
 
-        Lights = units.ToList();
-        Darks = units.ToList();
+        if (lister == null) return;
 
-        List<Character> destroyer = new List<Character>();
-        for (int i = 0; i < Lights.Count; i++)
-        {
-            if (Lights[i].Team != CharacterTeam.Light)
-            {
-                destroyer.Add(Lights[i]);
-            }
-        }
-        Lights.RemoveAll(character => destroyer.Contains(character));
-
-        destroyer.Clear();
-        for (int i = 0; i < Lights.Count; i++)
-        {
-            if (Darks[i].Team != CharacterTeam.Dark)
-            {
-                destroyer.Add(Darks[i]);
-            }
-        }
-        Darks.RemoveAll(character => destroyer.Contains(character));
+        Lights = lister.LightCharacters();
+        Darks = lister.DarkCharacters();
     }
     private void OnDeath(UnitDeathEvent ev)
     {
-        if (Lights.Contains(ev.unit))
+        if (ev.unit.Team == CharacterTeam.Light)
         {
             Lights.Remove(ev.unit);
+
             if (Lights.Count == 0)
             {
                 EventBus.Raise(new CombatEndEvent { winningTeam = CharacterTeam.Dark });
             }
         }
-        if (Darks.Contains(ev.unit))
+        if (ev.unit.Team == CharacterTeam.Dark)
         {
             Darks.Remove(ev.unit);
+            Debug.Log(Darks.Count);
             if (Darks.Count == 0)
             {
                 EventBus.Raise(new CombatEndEvent { winningTeam = CharacterTeam.Light});

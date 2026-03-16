@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Effect 
 {
     public string EffectName = "";
+    public EffectType effectType;
     public Character caster;
     public Character target;
 
     public float value;
     public EffectResponseType responseType;
+    public int priority = 0; // value between 0-100
 
     public int duration = 1;
     public EffectDuration durationType;
@@ -34,15 +37,18 @@ public class Effect
         return value;
     }
 
-
-    public virtual void OnTurnStart(TurnStartEvent ev)
+    public virtual IEnumerator OnTurnStart(TurnStartEvent ev)
     {
-
+        yield break;
     }
-
-    public virtual void OnTurnEnd(TurnEndEvent ev)
+    public virtual IEnumerator OnTurnEnd(TurnEndEvent ev)
     {
-
+        yield break;
+    }
+    public virtual IEnumerator WaitTimer()
+    {
+        yield return new WaitForSeconds(.3f);
+        yield break;
     }
 }
 
@@ -64,4 +70,12 @@ public enum EffectDuration
     Infinite,
     Round,
     Combat
+}
+
+public enum EffectType
+{
+    none,
+    positive,
+    malicious,
+    All,
 }

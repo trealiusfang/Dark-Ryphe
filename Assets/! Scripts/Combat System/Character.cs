@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.Playables;
+using System.Collections;
 using UnityEngine;
 
 public class Character : BusRoute
@@ -12,10 +13,14 @@ public class Character : BusRoute
     public Stats currentStats;
     private List<Effect> effects = new List<Effect>();
     bool dead = false;
+    private Material material;
+    public Sprite DeathSprite;
 
     void Awake()
     {
         abilityHolder = GetComponent<AbilityHolder>();
+        material = GetComponent<SpriteRenderer>().material;
+
         if (charData != null)
         {
             baseStats = charData.characterStats;
@@ -38,12 +43,9 @@ public class Character : BusRoute
             if (charEffect.EffectName == effect.EffectName)
             {
                 charEffect.value += effect.value;
-                Debug.Log("Effect value increase");
                 return;
             }
         }
-        SubnApply<TurnStartEvent>(effect.OnTurnStart);
-        SubnApply<TurnEndEvent>(effect.OnTurnEnd);
 
         effects.Add(effect);
     }
@@ -103,12 +105,30 @@ public class Character : BusRoute
 
     void Die()
     {
+        dead = true;
+        StartCoroutine(dieFunc());
+    }
+
+    private IEnumerator dieFunc()
+    {
+        yield return null;
+
+        GetComponent<SpriteRenderer>().sprite = DeathSprite;
+        EventBus.Raise(new SFXEvent { sfx_string = "unit death"});
+        float timeElapsed = 0;
+        while (material.GetFloat("_Fade") > 0)
+        {
+            material.SetFloat("_Fade", 1 - timeElapsed);
+            timeElapsed += .05f;
+            yield return new WaitForSeconds(.05f);
+        }
         EventBus.Raise(new UnitDeathEvent
         {
             unit = this
         });
 
-        dead = true;
+        yield return new WaitForSeconds(.05f);
+
         Destroy(gameObject);
     }
 
@@ -129,6 +149,19 @@ public class Character : BusRoute
     public List<Effect> GetEffects()
     {
         return effects;
+    }
+
+    public Effect getEffect(string effectName)
+    {
+        foreach (Effect effect in effects)
+        {
+            if (effect.EffectName == effectName)
+            {
+                return (Effect) effect;
+            }
+        }
+
+        return null;
     }
 }
 

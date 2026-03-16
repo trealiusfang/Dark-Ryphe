@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
-public class CharacterPositioning : BusRoute
+public class CharacterLister : BusRoute
 {
     private void Awake()
     {
@@ -50,6 +50,18 @@ public class CharacterPositioning : BusRoute
         Darks = Darks.OrderBy(character => character.transform.position.x).ToList();
 
         Debug.Log("Lights: " + Lights.Count + ", Darks: " + Darks.Count);
+    }
+
+    public void SetTeam(CharacterTeam team, List<Character> characters)
+    {
+        if (team == CharacterTeam.Light)
+        {
+            Lights = characters;
+        } 
+        if (team == CharacterTeam.Dark)
+        {
+            Darks = characters;
+        }
     }
 
     public List<Character> LightCharacters()

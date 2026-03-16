@@ -309,6 +309,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 6d2e37136ee8f664d8176dcbb484a183, type: 3}
   - Name: Critical
     clip: {fileID: 8300000, guid: d7966e3de9cd69d4aa8460dae120df28, type: 3}
+  - Name: unit death
+    clip: {fileID: 8300000, guid: 0b3c873f85f0a3d4081539789bdefcf5, type: 3}
   Music:
   - Name: Summer Solstice
     clip: {fileID: 8300000, guid: 63a18a5479e3b4050aca04ef5f34f401, type: 3}

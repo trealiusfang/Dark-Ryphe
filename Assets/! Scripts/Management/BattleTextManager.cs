@@ -36,7 +36,14 @@ public class BattleTextManager : BusRoute
     private void BattleTextEvent(BattleTextEvent ev)
     {
         Vector2 totalOffset = new Vector2(UnityEngine.Random.value + offset.x, UnityEngine.Random.value * 2 + offset.y);
-        DisplayText(ev.text, ev.position + totalOffset, ev.textAnimType);
+        Vector2 CharacterPosition = Vector2.zero;
+        
+        if (ev.character != null)
+        {
+            CharacterPosition = GameInitializer.instance._combatManagers.GetComponent<CombatPositioner>().getPosition(ev.character);
+        }
+
+        DisplayText(ev.text, ev.position + CharacterPosition + totalOffset, ev.textAnimType);
     }
 
     private void DisplayText(string text, Vector2 position, TextAnimType textAnimType)

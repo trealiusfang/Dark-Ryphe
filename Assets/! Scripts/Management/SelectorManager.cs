@@ -9,7 +9,10 @@ public class SelectorManager : BusRoute
     public GameObject selectorPrefab;
     public Transform activeSelectors;
     private List<CharactersAndSelectors> CharactersAndSelectors = new List<CharactersAndSelectors>();
-    [SerializeField] private Vector2 offset;
+    [SerializeField] private Vector3 offset;
+
+    private Character character;
+    private Ability ability;
     public void Awake()
     {
         Sub<UnitDeathEvent>(OnUnitDeath);
@@ -17,6 +20,38 @@ public class SelectorManager : BusRoute
         Sub<AbilityUsedEvent>(OnAbilityUsed);
         Sub<TurnStartEvent>(OnTurnStart);
         Sub<AbilityFinishedEvent>(AfterAbilityUsed);
+    }
+    private void LateUpdate()
+    {
+        RectTransform canvasRect = activeSelectors as RectTransform;
+
+        for (int i = 0; i < CharactersAndSelectors.Count; i++)
+        {
+            CharactersAndSelectors item = CharactersAndSelectors[i];
+
+            if (item.character == null || item.selector == null)
+                continue;
+
+            RectTransform selectorRect = item.selector.GetComponent<RectTransform>();
+
+            Vector3 worldPos = new Vector3(
+                item.character.transform.position.x,
+                0,
+                item.character.transform.position.z
+            ) + new Vector3(offset.x, offset.y, offset.z);
+
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(worldPos);
+
+            Vector2 canvasPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect,
+                screenPoint,
+                Camera.main,
+                out canvasPos
+            );
+
+            selectorRect.localPosition = canvasPos;
+        }
     }
 
     private void OnTurnStart(TurnStartEvent ev)
@@ -26,6 +61,14 @@ public class SelectorManager : BusRoute
     private void AfterAbilityUsed(AbilityFinishedEvent ev)
     {
         addSelector(ev.caster, SelectorType.Self);
+
+        if (character != null && ability != null)
+        {
+            if (character.abilityHolder.abilityAvailable(ability))
+            {
+                AbilitySelected(new AbilitySelectedEvent { ability = ability, unit = character });
+            }
+        }
     }
 
     private void OnAbilityUsed(AbilityUsedEvent ev)
@@ -46,11 +89,15 @@ public class SelectorManager : BusRoute
 
     public void AbilitySelected(AbilitySelectedEvent ev)
     {
+        List<Character> targets = TargetSetter.SetTarget(ev.unit, ev.ability);
+
+        character = ev.unit;
+        ability = ev.ability;
         OnAbilityUsed(new AbilityUsedEvent
         {
             caster = ev.unit,
             ability = ev.ability,
-            targets = ev.targets,
+            targets = targets
         });
 
         SelectorType sendType = SelectorType.None;
@@ -65,12 +112,15 @@ public class SelectorManager : BusRoute
             case TargetType.SingleAlly or TargetType.AoEAlly:
                 sendType = SelectorType.Buff;
                 break;
+            case TargetType.SingleAll or TargetType.AoEAll:
+                sendType = SelectorType.Buff;
+                break;
             default:
                 sendType = SelectorType.Self;
                 break;
         }
 
-        ApplySelectorToGroup(ev.unit, ev.targets, ev.unit.Team, sendType);
+        ApplySelectorToGroup(ev.unit, targets, ev.unit.Team, sendType);
     }
 
     public void ApplySelectorToGroup(Character caster ,List<Character> targets, CharacterTeam team, SelectorType type)
@@ -91,6 +141,7 @@ public class SelectorManager : BusRoute
 
     void addSelector(Character unit, SelectorType type)
     {
+        if (unit == null || unit.isDead()) return;
         bool itsSaved = false; GameObject selector = null;
         foreach (CharactersAndSelectors charactersAndSelector in CharactersAndSelectors)
         {
@@ -147,18 +198,31 @@ public class SelectorManager : BusRoute
                 _selector.SetActive(true);
             }
         }
-
-        if (_selector != null)
+        if (_selector == null)
         {
-            return _selector;
-        } else
-        {
-            if (character != null)
-                _selector = Instantiate(selectorPrefab, new Vector3(character.transform.position.x + offset.x, offset.y), Quaternion.identity, activeSelectors);
-            else
-                _selector = Instantiate(selectorPrefab, activeSelectors);
-            return _selector;
+            _selector = Instantiate(selectorPrefab, activeSelectors);
         }
+        if (character != null)
+        {
+            RectTransform canvasRect = activeSelectors as RectTransform;
+            RectTransform selectorRect = _selector.GetComponent<RectTransform>();
+
+            Vector3 worldPos = new Vector3(character.transform.position.x, 0, character.transform.position.z) + new Vector3(offset.x, offset.y, offset.z);
+
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(worldPos);
+
+            Vector2 canvasPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect,
+                screenPoint,
+                Camera.main,
+                out canvasPos
+            );
+
+            selectorRect.localPosition = canvasPos;
+        }
+
+        return _selector;
     }
 
     private void refundSelector(GameObject selector)

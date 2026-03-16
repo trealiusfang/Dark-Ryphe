@@ -31,6 +31,12 @@ public class TurnManager : BusRoute
         turnQueue = new Queue<Character>(ordered);
     }
 
+    IEnumerator beforeNextTurn(TurnEndEvent ev)
+    {
+        yield return ResolveTurnEnd(ev.unit);
+        yield return StartNextTurn();
+    }
+
     IEnumerator StartNextTurn()
     {
         if (turnQueue.Count == 0)
@@ -44,6 +50,7 @@ public class TurnManager : BusRoute
         yield return new WaitForSeconds(0.5f); //wait a lil before next guy
 
         EventBus.Raise(new TurnStartEvent { unit = currentUnit });
+        yield return ResolveTurnStart(currentUnit);
     }
 
     void OnTurnEnd(TurnEndEvent ev)
@@ -55,6 +62,7 @@ public class TurnManager : BusRoute
     {
         if (ev.unit ==  currentUnit)
         {
+            AbilityFirer.StopLastUsedAbility();
             StartCoroutine(StartNextTurn());
         } else
         {
@@ -64,4 +72,37 @@ public class TurnManager : BusRoute
             turnQueue = new Queue<Character>(units);
         }
     }
+    public IEnumerator ResolveTurnStart(Character unit)
+    {
+        TurnStartEvent ev = new TurnStartEvent { unit = unit };
+
+        // collect effects
+        List<Effect> effects = new List<Effect>(unit.GetEffects());
+
+        foreach (var effect in effects)
+        {
+            yield return effect.OnTurnStart(ev);
+        }
+
+        // AFTER all effects finish
+        EventBus.Raise(new UnitReadyEvent { unit = unit });
+    }
+
+    public IEnumerator ResolveTurnEnd(Character unit)
+    {
+        TurnEndEvent ev = new TurnEndEvent { unit = unit };
+
+        // collect effects
+        List<Effect> effects = new List<Effect>(unit.GetEffects());
+
+        foreach (var effect in effects)
+        {
+            yield return effect.OnTurnEnd(ev);
+        }
+    }
+}
+
+public class UnitReadyEvent : EventData
+{
+    public Character unit;
 }

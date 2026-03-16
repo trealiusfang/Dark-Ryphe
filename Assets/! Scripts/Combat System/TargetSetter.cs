@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.UI;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public static class TargetSetter
 {
     public static List<Character> SetTarget(Character caster, Ability ability)
     {
-        CharacterPositioning poses = GameInitializer.instance._combatManagers.GetComponent<CharacterPositioning>();
+        CharacterLister poses = GameInitializer.instance._combatManagers.GetComponent<CharacterLister>();
         TargetType type = ability.targetType;
         List<Character> result = new List<Character>();
 
@@ -44,6 +45,11 @@ public static class TargetSetter
                 }
                 return result;
 
+            case TargetType.SingleAll or TargetType.AoEAll:
+                groupWanted.AddRange(poses.LightCharacters());
+                groupWanted.AddRange(poses.DarkCharacters());
+
+                return groupWanted;
             default:
                 Debug.Log("used default");
                 result.Add(caster);

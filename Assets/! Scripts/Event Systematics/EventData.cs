@@ -25,7 +25,6 @@ public class AbilitySelectedEvent : EventData
 {
     public Character unit;
     public Ability ability;
-    public List<Character> targets;
 }
 
 public class AbilityUsedEvent : EventData
@@ -79,6 +78,7 @@ public class BattleTextEvent : EventData
 {
     public string text;
     public Vector2 position;
+    public Character character;
     public TextAnimType textAnimType;
 }
 
