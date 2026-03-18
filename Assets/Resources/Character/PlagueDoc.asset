@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlagueDoc
   m_EditorClassIdentifier: 
   characterName: Plague Doc
+  alternativeInfo: A basic enemy, but his ways come from a long, dark past
   charSprite: {fileID: -2085745340882890450, guid: 51eb4ed1c6144bc4c9d4429142847425, type: 3}
   characterStats:
     maxHP: 45

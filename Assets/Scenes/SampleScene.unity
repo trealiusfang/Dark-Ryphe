@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainCamera: {fileID: 1382193962420984745, guid: 090ad9d45b53add499713fbba8ebbd6d, type: 3}
+  _inputManager: {fileID: 288902559472213780, guid: 668888984526f6e449d057a6330226b1, type: 3}
   _audioService: {fileID: 1525254243968831570, guid: 35634d87df0c4d840b0fc49b70412b0b, type: 3}
   Forced: {fileID: 675422267439755825, guid: 1d22449e69c0c1449b1bf4c9feabe4cf, type: 3}
   UI: {fileID: 7309965484100253315, guid: ee99ec36f3a85fd4892b354cb659a54f, type: 3}

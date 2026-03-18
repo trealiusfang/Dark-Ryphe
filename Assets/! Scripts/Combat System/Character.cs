@@ -4,7 +4,7 @@ using UnityEditor.Playables;
 using System.Collections;
 using UnityEngine;
 
-public class Character : BusRoute
+public class Character : BusRoute, IInspectable
 {
     public CharacterData charData;
     public CharacterTeam Team;
@@ -26,7 +26,6 @@ public class Character : BusRoute
             baseStats = charData.characterStats;
             GetComponent<SpriteRenderer>().sprite = charData.charSprite;
             transform.name = charData.characterName + " (Character)";
-            abilityHolder.Abilities = charData.Abilities;
         }
 
         currentStats.currentHP = baseStats.maxHP;
@@ -162,6 +161,11 @@ public class Character : BusRoute
         }
 
         return null;
+    }
+
+    public void OnInspect()
+    {
+        EventBus.Raise(new InspectedCharacterEvent { character = this });
     }
 }
 

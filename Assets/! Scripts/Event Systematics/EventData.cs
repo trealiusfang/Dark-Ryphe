@@ -80,6 +80,12 @@ public class BattleTextEvent : EventData
     public Vector2 position;
     public Character character;
     public TextAnimType textAnimType;
+    public bool isCrit;
+}
+
+public class InspectedCharacterEvent : EventData 
+{
+    public Character character;
 }
 
 

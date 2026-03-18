@@ -128,7 +128,7 @@ public static class EffectLibrary
                 {
                     yield return new WaitForSeconds(.25f);
 
-                    EffectSystem.ApplyActionImmidiate(new ActionLibrary.CritAction { caster = action.target, target = action.caster, value = action.target.baseStats.power});
+                    EffectSystem.ApplyActionImmidiate(new ActionLibrary.DamageAction { caster = action.target, target = action.caster, value = action.target.baseStats.power});
                 }
             }
         }

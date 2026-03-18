@@ -76,7 +76,7 @@ public class TurnManager : BusRoute
     {
         TurnStartEvent ev = new TurnStartEvent { unit = unit };
 
-        // collect effects
+        //collect effects
         List<Effect> effects = new List<Effect>(unit.GetEffects());
 
         foreach (var effect in effects)
@@ -84,7 +84,7 @@ public class TurnManager : BusRoute
             yield return effect.OnTurnStart(ev);
         }
 
-        // AFTER all effects finish
+        //AFTER all effects finish
         EventBus.Raise(new UnitReadyEvent { unit = unit });
     }
 
@@ -92,7 +92,7 @@ public class TurnManager : BusRoute
     {
         TurnEndEvent ev = new TurnEndEvent { unit = unit };
 
-        // collect effects
+        //collect effects
         List<Effect> effects = new List<Effect>(unit.GetEffects());
 
         foreach (var effect in effects)

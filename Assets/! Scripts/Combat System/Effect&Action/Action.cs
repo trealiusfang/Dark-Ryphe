@@ -8,14 +8,15 @@ public class Action
     public Character caster;
     public Character target;
     public float value;
+    public bool isCrit;
 
     public ActionType actionType;
 
-    public Func<Character,Character, float, IEnumerator> ActionLogic;
-    public virtual IEnumerator Execute(Character caster, Character target, float value)
+    public Func<Character,Character, float, bool, IEnumerator> ActionLogic;
+    public virtual IEnumerator Execute(Character caster, Character target, float value, bool isCrit)
     {
         if (ActionLogic != null)
-            yield return ActionLogic(caster, target, value);
+            yield return ActionLogic(caster, target, value, isCrit);
     }
 }
 

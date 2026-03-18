@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 1505912609350056629}
   - component: {fileID: 6921087533992686377}
   - component: {fileID: 2243775821023865523}
+  - component: {fileID: 1538702592628916675}
   m_Layer: 0
   m_Name: Plague Doc (Character)
   m_TagString: Untagged
@@ -157,6 +158,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Abilities: []
+--- !u!65 &1538702592628916675
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6221408947060015410}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7733333, y: 3.6466668, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6509976068503327167
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,6 +227,7 @@ GameObject:
   - component: {fileID: 2310392037530174380}
   - component: {fileID: 7796540419041398277}
   - component: {fileID: 2885669141606498181}
+  - component: {fileID: 1997900761275154591}
   m_Layer: 0
   m_Name: Marki (Character)
   m_TagString: Untagged
@@ -318,6 +341,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Abilities: []
+--- !u!65 &1997900761275154591
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766599138417428145}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.392, y: 4, z: 0.2}
+  m_Center: {x: 0, y: -0.00000023841858, z: 0}
 --- !u!1 &7467484882090794321
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +374,7 @@ GameObject:
   - component: {fileID: 5573997053337741734}
   - component: {fileID: 1286315575430342915}
   - component: {fileID: 4995800958766333845}
+  - component: {fileID: 6349835403327048568}
   m_Layer: 0
   m_Name: Zodiac
   m_TagString: Untagged
@@ -443,6 +488,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Abilities: []
+--- !u!65 &6349835403327048568
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7467484882090794321}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.18, y: 4.7, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8888181421436893762
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +522,7 @@ GameObject:
   - component: {fileID: 8245868681563986266}
   - component: {fileID: 7196330663957561061}
   - component: {fileID: 1038824243450213881}
+  - component: {fileID: 6643443046732344929}
   m_Layer: 0
   m_Name: Ducky
   m_TagString: Untagged
@@ -603,6 +670,27 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!65 &6643443046732344929
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8888181421436893762}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0.00000047683716, y: -0.00000011920929, z: 0}
 --- !u!1 &9010558149332856177
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,6 +703,7 @@ GameObject:
   - component: {fileID: 2411223840728548852}
   - component: {fileID: 5418114787215446614}
   - component: {fileID: 7012250494429230132}
+  - component: {fileID: 3968840326814024740}
   m_Layer: 0
   m_Name: Sans (Character)
   m_TagString: Untagged
@@ -728,3 +817,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Abilities: []
+--- !u!65 &3968840326814024740
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9010558149332856177}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5733334, y: 2, z: 0.2}
+  m_Center: {x: -0.00000047683716, y: -0.00000023841858, z: 0}

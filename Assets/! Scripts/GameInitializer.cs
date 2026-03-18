@@ -5,11 +5,11 @@ using System;
 public class GameInitializer : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera;
+    [SerializeField] private GameInputManager _inputManager;
     [SerializeField] private AudioService _audioService;
     [SerializeField] private GameObject Forced, UI, Background, Gameplay;
     [SerializeField] private LoadingScreen _loadingScreen;
     [SerializeField] public GameObject _combatManagers;
-
     public static GameInitializer instance { get; private set; }
 
     private async void Start()
@@ -38,6 +38,7 @@ public class GameInitializer : MonoBehaviour
     {
         _loadingScreen = Instantiate(_loadingScreen);
         _mainCamera = Instantiate(_mainCamera); 
+        _inputManager = Instantiate(_inputManager); 
         _audioService = Instantiate(_audioService);
         _combatManagers = Instantiate(_combatManagers);
     }
@@ -46,6 +47,7 @@ public class GameInitializer : MonoBehaviour
     {
         await UniTask.Delay(TimeSpan.FromSeconds(.1f), DelayType.DeltaTime, PlayerLoopTiming.Update);
         _audioService.Initialize();
+        _inputManager.Initialize(_mainCamera);
         //Services like analytics or new input system should be enabled here
         // await inputSystem.Enabled;
     }

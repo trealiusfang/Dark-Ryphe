@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Zodiac
   m_EditorClassIdentifier: 
   characterName: Zodiac
+  alternativeInfo: Also known as Don Aletorio
   charSprite: {fileID: 21300000, guid: c2a8cfaaa7bd8d54296b76430a09c8f0, type: 3}
   characterStats:
     maxHP: 33

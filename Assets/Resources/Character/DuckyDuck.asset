@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: DuckyDuck
   m_EditorClassIdentifier: 
   characterName: Ducky Duck
-  charSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  alternativeInfo: Mr. Duck himself
+  charSprite: {fileID: 5888746204659970658, guid: 5cabcb4d63e183b46bd26b49d601b845, type: 3}
   characterStats:
     maxHP: 30
-    maxMana: 10
-    manaRegen: 10
-    speed: 1
+    maxMana: 20
+    manaRegen: 14
+    speed: 5
     power: 3
     luck: 3
   Abilities:

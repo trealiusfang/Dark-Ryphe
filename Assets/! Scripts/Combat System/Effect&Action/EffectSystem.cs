@@ -17,6 +17,14 @@ public class EffectSystem : MonoBehaviour
         target = action.target;
         actionResponse = ActionResponse.None;
         List<Effect> effects = action.caster.GetEffects();
+
+        bool isCrit = false;
+        int luckAmount = action.caster.baseStats.luck;
+
+        int r = UnityEngine.Random.Range(15, 100);
+
+        if (r < luckAmount * 8) isCrit = true; 
+
         for (int i = 0; i < effects.Count; i++)
         {
             if (effects[i].responseType == EffectResponseType.BeforeApply)
@@ -112,13 +120,14 @@ public class EffectSystem : MonoBehaviour
         }
 
         //Action applied
-        GameInitializer.instance.StartCoroutine(action.Execute(action.caster, target, value));
+        GameInitializer.instance.StartCoroutine(action.Execute(action.caster, target, value, isCrit));
     }
 
     public static void ApplyActionImmidiate(Action action)
     {
         float value = action.value;
         List<Effect> effects = action.caster.GetEffects();
+        bool isCrit = false;
 
         for (int i = 0; i < effects.Count; i++)
         {
@@ -140,7 +149,7 @@ public class EffectSystem : MonoBehaviour
             }
         } 
         //No further responses
-        GameInitializer.instance.StartCoroutine(action.Execute(action.caster, action.target, action.value));
+        GameInitializer.instance.StartCoroutine(action.Execute(action.caster, action.target, action.value, isCrit));
     }
 
     public static void ApplyEffect(Effect effect)

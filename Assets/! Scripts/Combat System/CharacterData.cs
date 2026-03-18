@@ -7,6 +7,7 @@ using UnityEngine;
 public class CharacterData : ScriptableObject
 {
     public string characterName;
+    public string alternativeInfo;
     public Sprite charSprite;
     public CombatStats characterStats;
     public List<AbilitySO> Abilities;

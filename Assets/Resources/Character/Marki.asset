@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Marki
   m_EditorClassIdentifier: 
   characterName: Marki
+  alternativeInfo: Too tired from making a fire movie
   charSprite: {fileID: 5263557293037209970, guid: e33f80722f5ad794280ba77a5f4777d5, type: 3}
   characterStats:
     maxHP: 40

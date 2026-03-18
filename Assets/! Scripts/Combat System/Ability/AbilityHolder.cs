@@ -14,6 +14,9 @@ public class AbilityHolder : BusRoute
     private void Awake()
     {
         character = GetComponent<Character>();
+        if (character == null) { Debug.LogError($"CHARACTER IS NULL! \"{character.name}\""); }
+
+        Abilities = character.charData.Abilities;
         for (int i = 0; i < Abilities.Count; i++)
         {
             allAbilities.Add(AbilityLibrary.StringToAbility(Abilities[i].name));
