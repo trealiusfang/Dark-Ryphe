@@ -74,7 +74,6 @@ public class GameInitializer : MonoBehaviour
 
     private async UniTask BeginGame()
     {
-        _audioService.PlayMusic("Battle Theme");
         _combatManagers.GetComponent<CombatManager>().StartCombat();
         await UniTask.Delay(TimeSpan.FromSeconds(.2f), DelayType.DeltaTime, PlayerLoopTiming.Update);
     }
