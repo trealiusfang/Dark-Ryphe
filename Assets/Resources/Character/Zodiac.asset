@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Zodiac
   alternativeInfo: Also known as Don Aletorio
-  charSprite: {fileID: 21300000, guid: c2a8cfaaa7bd8d54296b76430a09c8f0, type: 3}
   characterStats:
     maxHP: 33
     maxMana: 12
@@ -28,3 +27,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 61e274b5b6e983346bd00424d2a19d64, type: 2}
   - {fileID: 11400000, guid: ca6609d8155dbe24794bb4c82e3b7078, type: 2}
   - {fileID: 11400000, guid: 0eec9d60ad538e04cac09d58a3ea88e2, type: 2}
+  baseSprite: {fileID: 21300000, guid: c2a8cfaaa7bd8d54296b76430a09c8f0, type: 3}
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []

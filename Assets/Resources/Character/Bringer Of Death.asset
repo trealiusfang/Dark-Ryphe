@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8407e4c46b0aabf42886579a6da4657a, type: 3}
+  m_Name: Bringer Of Death
+  m_EditorClassIdentifier: 
+  characterName: Bringer Of Death
+  alternativeInfo: Loves pet dogs
+  characterStats:
+    maxHP: 65
+    maxMana: 12
+    manaRegen: 6
+    speed: 5
+    power: 8
+    luck: 5
+  Abilities: []
+  baseSprite: {fileID: -7605932586306218444, guid: 38e26291822c9b9479504c21a5a98126, type: 3}
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []

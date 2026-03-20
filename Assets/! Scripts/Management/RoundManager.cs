@@ -77,7 +77,7 @@ public class TurnManager : BusRoute
         TurnStartEvent ev = new TurnStartEvent { unit = unit };
 
         //collect effects
-        List<Effect> effects = new List<Effect>(unit.GetEffects());
+        List<Effect> effects = new List<Effect>(unit.effectHolder.GetEffects());
 
         foreach (var effect in effects)
         {
@@ -93,7 +93,7 @@ public class TurnManager : BusRoute
         TurnEndEvent ev = new TurnEndEvent { unit = unit };
 
         //collect effects
-        List<Effect> effects = new List<Effect>(unit.GetEffects());
+        List<Effect> effects = new List<Effect>(unit.effectHolder.GetEffects());
 
         foreach (var effect in effects)
         {

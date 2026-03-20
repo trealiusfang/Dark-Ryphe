@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Plague Doc
   alternativeInfo: A basic enemy, but his ways come from a long, dark past
-  charSprite: {fileID: -2085745340882890450, guid: 51eb4ed1c6144bc4c9d4429142847425, type: 3}
   characterStats:
     maxHP: 45
-    maxMana: 10
+    maxMana: 12
     manaRegen: 5
     speed: 4
     power: 7
@@ -27,3 +26,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e32221a41d684b849a10e7159edb0f82, type: 2}
   - {fileID: 11400000, guid: eee31cb080d295146bfce31dc7936d36, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  baseSprite: {fileID: -2085745340882890450, guid: 51eb4ed1c6144bc4c9d4429142847425, type: 3}
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []

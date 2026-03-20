@@ -8,7 +8,11 @@ public class CombatPositioner : BusRoute
     public float centerDistance = 1.5f;
     public float perCharacterDistance = 1;
     public float groundDistance = 1;
+    public float charMoveSpeed = 3;
+    [Header("Debug")]
     public bool resetpositioning;
+
+    List<Character> UnitsOnTheMove = new List<Character>();
     private void Awake()
     {
         Sub<CombatStartEvent>(SetArea);
@@ -38,6 +42,7 @@ public class CombatPositioner : BusRoute
         for (int i = 0; i < poses.LightCharacters().Count; i++)
         {
             Character currentCharacter = poses.LightCharacters()[i];
+            currentCharacter.renderer.spriteRenderer.flipX = !currentCharacter.charData.LookRight;
 
             if (currentCharacter == null) continue;
             ResetPosition(currentCharacter);
@@ -46,6 +51,7 @@ public class CombatPositioner : BusRoute
         for (int i = 0; i < poses.DarkCharacters().Count; i++)
         {
             Character currentCharacter = poses.DarkCharacters()[i];
+            currentCharacter.renderer.spriteRenderer.flipX = currentCharacter.charData.LookRight;
 
             if (currentCharacter == null) continue;
             ResetPosition(currentCharacter);
@@ -97,19 +103,54 @@ public class CombatPositioner : BusRoute
     {
         if (character == null) return;
 
+        if (UnitsOnTheMove.Contains(character))
+        {
+            StopCoroutine(resetCoroutine(character));
+            StartCoroutine(resetCoroutine(character));
+        } else
+        {
+            UnitsOnTheMove.Add(character);
+            StartCoroutine(resetCoroutine(character));
+        }
+    }
+
+    private IEnumerator resetCoroutine(Character character)
+    {
         CharacterLister poses = GameInitializer.instance._combatManagers.GetComponent<CharacterLister>();
         List<Character> characters = character.Team == CharacterTeam.Light ? poses.LightCharacters() : poses.DarkCharacters();
 
+        Vector3 startPos = character.transform.position;
+        Vector3 wantedPosition = Vector2.zero;
         for (int i = 0; i < characters.Count; i++)
         {
             if (character == characters[i])
             {
-                float tallness = character.GetComponent<SpriteRenderer>().bounds.size.y;
+                float tallness = character.renderer.spriteRenderer.bounds.size.y;
 
-                character.transform.position = new Vector3((centerDistance + (perCharacterDistance * i)) * (character.Team == CharacterTeam.Dark ? 1 : -1), (tallness / 2) - groundDistance, character.transform.position.z);
+                wantedPosition = new Vector3((centerDistance + (perCharacterDistance * i)) * (character.Team == CharacterTeam.Dark ? 1 : -1), (tallness / 2) - groundDistance, character.transform.position.z);
                 break;
             }
         }
+
+        float duration = 1f;
+        float timeElapsed = 0f;
+
+
+        while (timeElapsed < duration)
+        {
+            float t = timeElapsed / duration;
+
+            t = 1f - Mathf.Pow(1f - t, 3f);
+
+            character.transform.position = Vector3.Lerp(startPos, wantedPosition, t);
+
+            timeElapsed += Time.deltaTime * charMoveSpeed;
+            yield return null;
+        }
+
+        transform.position = wantedPosition;
+
+        if (UnitsOnTheMove.Contains(character)) UnitsOnTheMove.Remove(character);
     }
 
     public void PushPull(Character character, int howMuch)
@@ -148,7 +189,7 @@ public class CombatPositioner : BusRoute
         {
             if (character == characters[i])
             {
-                float tallness = character.GetComponent<SpriteRenderer>().bounds.size.y;
+                float tallness = character.renderer.spriteRenderer.bounds.size.y;
 
                savedVector = new Vector3((centerDistance + (perCharacterDistance * i)) * (character.Team == CharacterTeam.Dark ? 1 : -1), (tallness / 2) - groundDistance, character.transform.position.z);
                 break;

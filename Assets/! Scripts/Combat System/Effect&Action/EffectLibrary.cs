@@ -174,7 +174,7 @@ public static class EffectLibrary
             EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+BIGGER", textAnimType = TextAnimType.pyro });
             if (value < 0)
             EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "-Smol", textAnimType = TextAnimType.Premium });
-            float count = target.getEffect("BigAndSmall").value;
+            float count = target.effectHolder.getEffect("BigAndSmall").value;
             target.transform.localScale = new Vector3(1 + (.1f * count),1 + (.1f * count));
 
             GameInitializer.instance._combatManagers.GetComponent<CombatPositioner>().ResetPosition(target);

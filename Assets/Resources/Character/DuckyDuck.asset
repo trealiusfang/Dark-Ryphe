@@ -14,11 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Ducky Duck
   alternativeInfo: Mr. Duck himself
-  charSprite: {fileID: 5888746204659970658, guid: 5cabcb4d63e183b46bd26b49d601b845, type: 3}
   characterStats:
     maxHP: 30
     maxMana: 20
-    manaRegen: 14
+    manaRegen: 5
     speed: 5
     power: 3
     luck: 3
@@ -27,3 +26,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: afd47aea436a26a42afa404cb8f80892, type: 2}
   - {fileID: 11400000, guid: 0513213ce96b09e4d9e1faaee433f99d, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  baseSprite: {fileID: 374495580, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []

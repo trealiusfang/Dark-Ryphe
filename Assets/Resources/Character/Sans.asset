@@ -14,15 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Sans
   alternativeInfo: Weakest enemy, how much easier can it get?
-  charSprite: {fileID: 21300000, guid: 822fe0f0254a3e946a5f726e3136373a, type: 3}
   characterStats:
-    maxHP: 10
-    maxMana: 20
-    manaRegen: 3
+    maxHP: 20
+    maxMana: 15
+    manaRegen: 5
     speed: 15
     power: 12
-    luck: 99
+    luck: 10
   Abilities:
   - {fileID: 11400000, guid: 837d2ad2ba550be4b93ec75b35d98b68, type: 2}
   - {fileID: 11400000, guid: 0513213ce96b09e4d9e1faaee433f99d, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  baseSprite: {fileID: 21300000, guid: 822fe0f0254a3e946a5f726e3136373a, type: 3}
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []

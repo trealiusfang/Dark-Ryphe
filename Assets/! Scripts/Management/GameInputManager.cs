@@ -52,7 +52,6 @@ public class GameInputManager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, 100000))
         {
             var clickable = hit.collider.GetComponent<IInspectable>();
-            Debug.Log(hit.transform.name);
 
             if (clickable != null)
             {

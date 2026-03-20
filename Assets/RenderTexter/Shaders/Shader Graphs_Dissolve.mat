@@ -41,10 +41,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Fade: 0.916
+    - _Fade: 1
     - _Scale: 15.6
     m_Colors:
-    - _Color: {r: 5.3403134, g: 0, b: 0.05175425, a: 1}
+    - _Color: {r: 11.984312, g: 0, b: 0.11614283, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4886166988632785685
 MonoBehaviour:

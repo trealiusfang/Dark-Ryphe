@@ -8,9 +8,15 @@ public class CharacterData : ScriptableObject
 {
     public string characterName;
     public string alternativeInfo;
-    public Sprite charSprite;
     public CombatStats characterStats;
     public List<AbilitySO> Abilities;
+    [Header("Visuals")]
+    public Sprite baseSprite;
+    public bool LookRight = true;
+    public List<AnimationClip> AttackAnimations = new List<AnimationClip>();
+    public List<CharacterAnimationAndFrequency> IdleAnimations = new List<CharacterAnimationAndFrequency>();
+    public List<CharacterAnimationAndFrequency> HurtAnimations =new List<CharacterAnimationAndFrequency>();
+    public List<CharacterAnimationAndFrequency> DeathAnimations = new List<CharacterAnimationAndFrequency>();
 }
 [Serializable]
 public class CombatStats
@@ -28,6 +34,22 @@ public class Stats
 {
     public int currentHP = 30;
     public int currentMana = 10;
+}
+
+[Serializable]
+public class CharacterAnimationAndFrequency
+{
+    public AnimationClip clip;
+    [Range(0.01f,1)]
+    public float frequency;
+}
+
+public enum CharAnimationType
+{
+    Idle,
+    Attack,
+    Hurt,
+    Death
 }
 
 public enum CharacterTeam

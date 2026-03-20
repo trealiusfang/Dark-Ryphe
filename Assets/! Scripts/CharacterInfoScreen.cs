@@ -32,7 +32,7 @@ public class CharacterInfoScreen : BusRoute
         Name.text = character.charData.characterName;
         AlternativeInfo.text = character.charData.alternativeInfo;
 
-        CharacterImage.sprite = character.charData.charSprite;
+        CharacterImage.sprite = character.charData.baseSprite;
 
         for (int i = 0; i < AbilityButtons.Count; i++)
         {

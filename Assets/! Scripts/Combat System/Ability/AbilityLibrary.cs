@@ -198,9 +198,9 @@ public static class AbilityLibrary
             Character caster,
             List<Character> targets, Ability ability)
         {
+            ability.PlayAnimation(caster);
+            yield return new WaitForSeconds(0.4f);
             EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
-            yield return new WaitForSeconds(0.1f);
-
             foreach (var target in targets)
             {
                 EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * 1.5f, caster = caster });
@@ -375,7 +375,7 @@ public static class AbilityLibrary
                     EffectSystem.ApplyEffect(new EffectLibrary.BigAndSmall { caster = caster, target = target, value = 1});
                 } else // tails
                 {
-                    float effectValue = target.getEffect("BigAndSmall") != null ? -target.getEffect("BigAndSmall").value : 0 ;
+                    float effectValue = target.effectHolder.getEffect("BigAndSmall") != null ? -target.effectHolder.getEffect("BigAndSmall").value : 0 ;
                     EffectSystem.ApplyEffect(new EffectLibrary.BigAndSmall { caster = caster, target = target, value = effectValue });
                 }
             }

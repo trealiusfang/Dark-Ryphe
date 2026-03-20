@@ -16,7 +16,7 @@ public class EffectSystem : MonoBehaviour
         float value = action.value;
         target = action.target;
         actionResponse = ActionResponse.None;
-        List<Effect> effects = action.caster.GetEffects();
+        List<Effect> effects = action.caster.effectHolder.GetEffects();
 
         bool isCrit = false;
         int luckAmount = action.caster.baseStats.luck;
@@ -41,7 +41,7 @@ public class EffectSystem : MonoBehaviour
 
         if (action.caster != action.target && target != null)
         {
-            effects = action.target.GetEffects();
+            effects = action.target.effectHolder.GetEffects();
 
             for (int i = 0; i < effects.Count; i++)
             {
@@ -58,7 +58,7 @@ public class EffectSystem : MonoBehaviour
             return;
         }
 
-       effects = action.caster.GetEffects();
+       effects = action.caster.effectHolder.GetEffects();
         for (int i = 0; i < effects.Count; i++)
         {
             if (effects[i].responseType == EffectResponseType.OnApply)
@@ -69,7 +69,7 @@ public class EffectSystem : MonoBehaviour
 
         if (action.caster != action.target && target != null)
         {
-            effects = action.target.GetEffects();
+            effects = action.target.effectHolder.GetEffects();
 
             for (int i = 0; i < effects.Count; i++)
             {
@@ -91,7 +91,7 @@ public class EffectSystem : MonoBehaviour
             return;
         }
 
-        effects = action.caster.GetEffects();
+        effects = action.caster.effectHolder.GetEffects();
         for (int i = 0; i < effects.Count; i++)
         {
             if (effects[i].responseType == EffectResponseType.AfterApply)
@@ -102,7 +102,7 @@ public class EffectSystem : MonoBehaviour
 
         if (action.caster != action.target && target != null)
         {
-            effects = action.target.GetEffects();
+            effects = action.target.effectHolder.GetEffects();
 
             for (int i = 0; i < effects.Count; i++)
             {
@@ -126,7 +126,7 @@ public class EffectSystem : MonoBehaviour
     public static void ApplyActionImmidiate(Action action)
     {
         float value = action.value;
-        List<Effect> effects = action.caster.GetEffects();
+        List<Effect> effects = action.caster.effectHolder.GetEffects();
         bool isCrit = false;
 
         for (int i = 0; i < effects.Count; i++)
@@ -139,7 +139,7 @@ public class EffectSystem : MonoBehaviour
 
         if (action.target != null && action.target != action.caster) 
         {
-            effects = action.caster.GetEffects();
+            effects = action.caster.effectHolder.GetEffects();
             for (int i = 0; i < effects.Count; i++)
             {
                 if (effects[i].responseType == EffectResponseType.BeforeApply)
@@ -155,7 +155,7 @@ public class EffectSystem : MonoBehaviour
     public static void ApplyEffect(Effect effect)
     {
         Debug.Log(effect.EffectName + " has been applied to: " + effect.target);
-        effect.target.AddEffect(effect);
+        effect.target.effectHolder.AddEffect(effect);
         GameInitializer.instance.StartCoroutine(effect.OnApply(effect.target, effect.value));
     }
 

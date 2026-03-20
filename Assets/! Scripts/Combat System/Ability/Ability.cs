@@ -46,6 +46,10 @@ public class Ability
         EventBus.Raise(new AbilityFinishedEvent { caster = caster, ability = this });
         yield break;
     }
+    public virtual void PlayAnimation(Character caster, int index = 0)
+    {
+        caster.renderer.PlayActionAnimation(CharAnimationType.Attack, index);
+    }
 
 
     //If an ability requires certain conditions other than base conditions, they can be overriden here.
