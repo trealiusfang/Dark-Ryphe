@@ -10,6 +10,16 @@ public class Ability
     //Set in abilitySO
     public Sprite sprite = null;
     public AudioClip abilitySuccessClip = null;
+    public AudioClip abilityAlternativeClip = null;
+    public AnimationClip abilityEffectClip; //If an ability cast is a ranged spell for example, the spell animation object that spawns uses this animation.
+    public void SetAbility(AbilitySO abilitySO)
+    {
+        sprite = abilitySO.abilitySprite;
+        abilitySuccessClip = abilitySO.abilitySuccessClip;
+        abilityAlternativeClip = abilitySO.abilityAlternativeClip;
+        abilityEffectClip = abilitySO.abilityEffectClip;
+    }
+
     //Conditions
     public short manaCost = 4;
     public TargetType targetType;
@@ -46,9 +56,21 @@ public class Ability
         EventBus.Raise(new AbilityFinishedEvent { caster = caster, ability = this });
         yield break;
     }
-    public virtual void PlayAnimation(Character caster, int index = 0)
+    public virtual void PlayCharacterAnimation(Character caster, int index = 0)
     {
         caster.renderer.PlayActionAnimation(CharAnimationType.Attack, index);
+    }
+    public virtual void PlayEffectAnimation(Character target, Vector3 offset, float size = 1)
+    {
+        if (target == null || abilityEffectClip == null)
+        {
+            return;
+        } else
+        {
+            Vector3 spawnPos = new Vector3(target.transform.position.x, 0, target.transform.position.z) + offset;
+            
+            EventBus.Raise(new BattleEffectEvent { position = spawnPos, effectAnimation = abilityEffectClip, effectSize = size});
+        }
     }
 
 

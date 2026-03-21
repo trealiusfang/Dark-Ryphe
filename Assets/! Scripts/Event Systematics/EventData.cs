@@ -88,4 +88,9 @@ public class InspectedCharacterEvent : EventData
     public Character character;
 }
 
-
+public class BattleEffectEvent : EventData
+{
+    public Vector3 position;
+    public AnimationClip effectAnimation;
+    public float effectSize;
+}

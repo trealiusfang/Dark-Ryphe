@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b904a4074b26e7e4b9fdafe2c9cb1786, type: 3}
-  m_Name: Slick Attack
+  m_Name: Raise From The Dark
   m_EditorClassIdentifier: 
-  abilitySprite: {fileID: -6141460806656067147, guid: 9db678ef10ba6a740a8943ecf8bbf019, type: 3}
-  abilitySuccessClip: {fileID: 8300000, guid: b37bf09faded4d640886e167f9d355b4, type: 3}
+  abilitySprite: {fileID: 536054399269926812, guid: a9a3d26ccc15c7a4f8891de8f2f464dd, type: 3}
+  abilitySuccessClip: {fileID: 8300000, guid: d698f04c26c42c84aa70141db11f6b43, type: 3}
   abilityAlternativeClip: {fileID: 0}
-  abilityEffectClip: {fileID: 0}
+  abilityEffectClip: {fileID: 7400000, guid: 77f24c31ef7c68f47a8a77b5bd7314c9, type: 2}

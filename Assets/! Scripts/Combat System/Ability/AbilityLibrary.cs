@@ -92,7 +92,7 @@ public static class AbilityLibrary
             List<Character> targets, Ability ability)
         {
             EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.55f);
 
             foreach (var target in targets)
             {
@@ -146,7 +146,9 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { target = caster, value = ability.abilityValue, caster = caster });
+                float value = target.currentStats.currentMana < ability.abilityValue ? target.currentStats.currentMana : ability.abilityValue;
+                EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { target = caster, value = value, caster = caster });
+                target.currentStats.currentMana -= Mathf.FloorToInt(value);
             }
         }
 
@@ -198,9 +200,10 @@ public static class AbilityLibrary
             Character caster,
             List<Character> targets, Ability ability)
         {
-            ability.PlayAnimation(caster);
-            yield return new WaitForSeconds(0.4f);
+            ability.PlayCharacterAnimation(caster);
+            yield return new WaitForSeconds(0.2f);
             EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            yield return new WaitForSeconds(0.2f);
             foreach (var target in targets)
             {
                 EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * 1.5f, caster = caster });
@@ -508,6 +511,37 @@ public static class AbilityLibrary
 
 
     #endregion
+    public class RaiseFromTheDark : Ability
+    {
+        public RaiseFromTheDark()
+        {
+            abilityName = "Raise From The Dark";
+            manaCost = 7;
+            targetType = TargetType.AoEEnemy;
+
+            targetSpots = new short[] { 1, 1, 1, 1 };
+            AbilityLogic = _AbilityLogic;
+        }
+        public static IEnumerator _AbilityLogic(
+            Character caster,
+            List<Character> targets, Ability ability)
+        {
+            ability.PlayCharacterAnimation(caster, 1);
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            foreach (var target in targets)
+            {
+                ability.PlayEffectAnimation(target, new Vector3(0, 4.5f, 0), 5f);
+            }
+            yield return new WaitForSeconds(.4f);
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilityAlternativeClip });
+
+            yield return new WaitForSeconds(.3f);
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = caster.baseStats.power * .3f});
+            }
+        }
+    }
 
 
     public static Ability StringToAbility(string abilityName)

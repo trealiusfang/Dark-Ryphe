@@ -69,7 +69,6 @@ public class GameInputManager : MonoBehaviour
         if (EventSystem.current == null) { Debug.Log("No event system?"); return false; }
         
         EventSystem.current.RaycastAll(pointerData, results);
-        if (results.Count > 0) Debug.Log("On UI MF");
         return results.Count > 0;
     }
 }

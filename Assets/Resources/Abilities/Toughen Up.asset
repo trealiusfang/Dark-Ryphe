@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Toughen Up
   m_EditorClassIdentifier: 
   abilitySprite: {fileID: 21300000, guid: a2563f2b8dbc4044b9a50537d3a29962, type: 3}
-  abilitySuccessClip: {fileID: 8300000, guid: 9ae60d47e18b8b14c804df0b5410aabd, type: 3}
+  abilitySuccessClip: {fileID: 8300000, guid: 24d27697387564f46b00c5e0a369873b, type: 3}
+  abilityAlternativeClip: {fileID: 0}
+  abilityEffectClip: {fileID: 0}

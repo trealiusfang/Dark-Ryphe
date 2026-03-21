@@ -84,22 +84,22 @@ public class CharacterRenderer : MonoBehaviour
         switch (type)
         {
             case CharAnimationType.Idle:
-                if (num > IdleAnimations.Count || IdleAnimations.Count == 0) num = IdleAnimations.Count - 1;
+                if (num >= IdleAnimations.Count || IdleAnimations.Count == 0) num = IdleAnimations.Count - 1;
                 if (num < 0) return;
                 clip = IdleAnimations[num].clip;
                 break;
             case CharAnimationType.Attack:
-                if (num > AttackAnimations.Count || AttackAnimations.Count == 0) num = AttackAnimations.Count - 1;
+                if (num >= AttackAnimations.Count || AttackAnimations.Count == 0) num = AttackAnimations.Count - 1;
                 if (num < 0) return;
                 clip = AttackAnimations[num];
                 break;
             case CharAnimationType.Hurt:
-                if (num > HurtAnimations.Count || HurtAnimations.Count == 0) num = HurtAnimations.Count - 1;
+                if (num >= HurtAnimations.Count || HurtAnimations.Count == 0) num = HurtAnimations.Count - 1;
                 if (num < 0) return;
                 clip = HurtAnimations[num].clip;
                 break;
             case CharAnimationType.Death:
-                if (num > DeathAnimations.Count || DeathAnimations.Count == 0) num = DeathAnimations.Count - 1;
+                if (num >= DeathAnimations.Count || DeathAnimations.Count == 0) num = DeathAnimations.Count - 1;
                 if (num < 0) return;
                 clip = DeathAnimations[num].clip;
                 break;
@@ -108,7 +108,7 @@ public class CharacterRenderer : MonoBehaviour
         string _type = type.ToString();
         if (type != CharAnimationType.Idle) clip.wrapMode = WrapMode.Once;
 
-        actionOverrides[_type + " State"] = clip;
+        actionOverrides[_type + "State"] = clip;
         actionController.ApplyOverrides(actionOverrides);
 
         actionAnimator.SetTrigger(_type);

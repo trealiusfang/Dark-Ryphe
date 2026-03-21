@@ -24,11 +24,13 @@ MonoBehaviour:
   Abilities:
   - {fileID: 11400000, guid: afd47aea436a26a42afa404cb8f80892, type: 2}
   - {fileID: 11400000, guid: f623374ad3f01714494aeea9ba4e5fcd, type: 2}
+  - {fileID: 11400000, guid: bf1243eb0d1e6f048b9ff5890af54043, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
   baseSprite: {fileID: 5263557293037209970, guid: e33f80722f5ad794280ba77a5f4777d5, type: 3}
   LookRight: 0
   AttackAnimations:
   - {fileID: 7400000, guid: c99207e72a7f9ac4a983bc66ea077909, type: 2}
+  - {fileID: 7400000, guid: 7ab3e66d872f3704092617677c4a1dc6, type: 2}
   IdleAnimations:
   - clip: {fileID: 7400000, guid: 890c5833f64f429459ab4356e2b8f775, type: 2}
     frequency: 0

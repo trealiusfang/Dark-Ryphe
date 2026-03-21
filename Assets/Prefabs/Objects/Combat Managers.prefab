@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6426619214359618012}
   - component: {fileID: 7179357076350683811}
   - component: {fileID: 6273767993950673463}
+  - component: {fileID: 6266151695593810915}
   m_Layer: 0
   m_Name: Combat Managers
   m_TagString: Untagged
@@ -86,4 +87,18 @@ MonoBehaviour:
   centerDistance: 11
   perCharacterDistance: 10
   groundDistance: 12
+  charMoveSpeed: 3
   resetpositioning: 0
+--- !u!114 &6266151695593810915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8832616120640694100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2d421c650991349982c761ad21c805, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 7302896292088726560, guid: 9d2e8837e8da0c74ea09b6c6de5e53ec, type: 3}

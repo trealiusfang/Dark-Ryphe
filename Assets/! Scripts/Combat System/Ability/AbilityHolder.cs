@@ -7,21 +7,20 @@ public class AbilityHolder : BusRoute
     private List<Ability> allAbilities = new List<Ability>();
     private List<Ability> activeAbilities = new List<Ability>();
 
-    public  List<AbilitySO> Abilities = new List<AbilitySO>();
+    public  List<AbilitySO> abilityStrings = new List<AbilitySO>();
     List<AbilityCooldownHandling> cooldownHandlings = new List<AbilityCooldownHandling>();
 
     private Character character;
     private void Awake()
     {
         character = GetComponent<Character>();
-        if (character == null) { Debug.LogError($"CHARACTER IS NULL! \"{character.name}\""); }
+        if (character == null) { Debug.LogError($"CHARACTER IS NULL! \"{transform.name}\""); }
 
-        Abilities = character.charData.Abilities;
-        for (int i = 0; i < Abilities.Count; i++)
+        abilityStrings = character.charData.Abilities;
+        for (int i = 0; i < abilityStrings.Count; i++)
         {
-            allAbilities.Add(AbilityLibrary.StringToAbility(Abilities[i].name));
-            allAbilities[i].sprite = Abilities[i].abilitySprite;
-            allAbilities[i].abilitySuccessClip = Abilities[i].abilitySuccessClip;
+            allAbilities.Add(AbilityLibrary.StringToAbility(abilityStrings[i].name));
+            allAbilities[i].SetAbility(abilityStrings[i]);
         }
 
         Sub<TurnEndEvent>(LowerCooldown);
