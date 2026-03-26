@@ -32,14 +32,11 @@ public static class EffectLibrary
             yield return null;
         }
 
-        public override float calc(Action action, float _value, EffectedType type)
+        public override float statCalc(statType statType, float _value)
         {
-            if (type == EffectedType.Dealer)
+            if (statType == statType.Power)
             {
-                if (action.actionType == ActionType.DamagePhysical)
-                {
-                    return _value + value;
-                }
+                return _value + value;
             }
 
             return _value;
@@ -61,14 +58,12 @@ public static class EffectLibrary
             EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+ " + value + " Weakness", textAnimType = TextAnimType.Spooky});
             yield return null;
         }
-        public override float calc(Action action, float _value, EffectedType type)
+
+        public override float statCalc(statType statType, float _value)
         {
-            if (type == EffectedType.Dealer)
+            if (statType == statType.Power)
             {
-                if (action.actionType == ActionType.DamagePhysical)
-                {
-                    return _value - value;
-                }
+                return _value - value;
             }
 
             return _value;
@@ -89,7 +84,7 @@ public static class EffectLibrary
             EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+ " + value + " Brace", textAnimType = TextAnimType.Metallic });
             yield return null;
         }
-        public override float calc(Action action, float _value, EffectedType type)
+        public override float actionCalc(Action action, float _value, EffectedType type)
         {
             if (type == EffectedType.Reciever)
             {
@@ -128,7 +123,7 @@ public static class EffectLibrary
                 {
                     yield return new WaitForSeconds(.25f);
 
-                    EffectSystem.ApplyActionImmidiate(new ActionLibrary.DamageAction { caster = action.target, target = action.caster, value = action.target.baseStats.power});
+                    EffectSystem.ApplyActionImmidiate(new ActionLibrary.DamageAction { caster = action.target, target = action.caster, value = action.target.GetStat(statType.Power)});
                 }
             }
         }
@@ -181,7 +176,7 @@ public static class EffectLibrary
             yield return null;
         }
 
-        public override float calc(Action action, float _value, EffectedType type)
+        public override float actionCalc(Action action, float _value, EffectedType type)
         {
             if (type == EffectedType.Dealer)
             {
@@ -209,12 +204,9 @@ public static class EffectLibrary
             if (value == 0) yield break;
 
             EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "ANGERED", textAnimType = TextAnimType.pyro });
-            target.baseStats.manaRegen += 2;
-            target.baseStats.speed += 2;
-
             yield return null;
         }
-        public override float calc(Action action, float _value, EffectedType type)
+        public override float actionCalc(Action action, float _value, EffectedType type)
         {
             if (type == EffectedType.Dealer)
             {
@@ -224,7 +216,23 @@ public static class EffectLibrary
                 }
             }
 
-            
+            if (type == EffectedType.Dealer)
+            {
+                if (action.actionType == ActionType.StatIncreaseManaRegen)
+                {
+                    return _value + value * 2;
+                }
+            }
+
+            return _value;
+        }
+
+        public override float statCalc(statType statType, float _value)
+        {
+            if (statType == statType.Speed)
+            {
+                return _value + value * 2;
+            }
 
             return _value;
         }
@@ -286,6 +294,36 @@ public static class EffectLibrary
             yield return WaitTimer();
         }
     }
+
+    public class SpeedBoost : Effect
+    {
+        public SpeedBoost() 
+        {
+            EffectName = "Speed Boost";
+            effectType = EffectType.positive;
+
+            durationType = EffectDuration.Combat;
+            ApplyEffects = OnApply;
+        }
+        public override IEnumerator OnApply(Character target, float value)
+        {
+            if (value == 0) yield break;
+
+            EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+" + value + " Speed", textAnimType = TextAnimType.Shock });
+            yield return null;
+        }
+
+        public override float statCalc(statType statType, float _value)
+        {
+            if (statType == statType.Speed)
+            {
+                return _value + value;
+            }
+
+            return _value;
+        }
+    }
+
 
     public static Effect GetARandomEffect()
     {

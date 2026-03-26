@@ -31,7 +31,7 @@ public class BattleTextManager : BusRoute
     private Vector3 textSpawnPosition = new Vector3(.5f, .65f, 0);
     private string textText;
     public Vector2 offset;
-
+    private Vector3 criticalOffset = new Vector3(0, 3);
 
     private void BattleTextEvent(BattleTextEvent ev)
     {
@@ -96,7 +96,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 premium,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplaySpooky(bool isCrit)
@@ -110,7 +110,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 spooky,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayPyro(bool isCrit)
@@ -124,7 +124,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 pyro,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayMetallic(bool isCrit)
@@ -138,7 +138,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 metallic,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayFreeze(bool isCrit)
@@ -152,7 +152,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 freeze,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayShock(bool isCrit)
@@ -166,7 +166,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 shock,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayLvlUp(bool isCrit)
@@ -180,7 +180,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 lvlUp,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayDamage(bool isCrit)
@@ -202,7 +202,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 ko,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
     }
 
     public void DisplayVenom(bool isCrit)
@@ -215,7 +215,7 @@ public class BattleTextManager : BusRoute
             PixelBattleTextController.DisplayText(
                 "CRITICAL!",
                 venom,
-                textSpawnPosition + new Vector3(0, 1, 0));
+                textSpawnPosition + criticalOffset);
 
     }
 
@@ -230,7 +230,7 @@ public class BattleTextManager : BusRoute
         PixelBattleTextController.DisplayText(
             "CRITICAL!",
             heal,
-            textSpawnPosition + new Vector3(0, 1, 0));
+            textSpawnPosition + criticalOffset);
 
     }
 
@@ -244,7 +244,7 @@ public class BattleTextManager : BusRoute
         PixelBattleTextController.DisplayText(
             "CRITICAL!",
             critical,
-            textSpawnPosition + new Vector3(0, 1, 0));
+            textSpawnPosition + criticalOffset);
 
     }
 }

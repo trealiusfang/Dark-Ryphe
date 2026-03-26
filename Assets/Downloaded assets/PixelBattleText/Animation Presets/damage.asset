@@ -44,8 +44,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  initialOffset: {x: 5, y: -5}
-  endOffset: {x: -5, y: -5}
+  initialOffset: {x: 0, y: -5}
+  endOffset: {x: 1, y: 75}
   offsetCurveX:
     serializedVersion: 2
     m_Curve:
@@ -54,7 +54,7 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -83,8 +83,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.224926
-      value: 1.4929924
+      time: 0.3440212
+      value: 0.33698654
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -92,8 +92,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5225109
-      value: 1
+      time: 0.54993284
+      value: 0.33550262
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -101,17 +101,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.93477476
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.0030975
-      value: 1.5043449
+      time: 1.0019379
+      value: 0.9784012
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -141,7 +132,7 @@ MonoBehaviour:
     ctime7: 0
     atime0: 0
     atime1: 3855
-    atime2: 58982
+    atime2: 53392
     atime3: 65535
     atime4: 0
     atime5: 0

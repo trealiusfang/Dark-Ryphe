@@ -13,6 +13,10 @@ public class CharacterData : ScriptableObject
     [Header("Visuals")]
     public Sprite baseSprite;
     public bool LookRight = true;
+    public Vector2 spriteOffset;
+    [Range(.5f, 5)]
+    public float DeathTimer = 1;
+    [Header("Animations")]
     public List<AnimationClip> AttackAnimations = new List<AnimationClip>();
     public List<CharacterAnimationAndFrequency> IdleAnimations = new List<CharacterAnimationAndFrequency>();
     public List<CharacterAnimationAndFrequency> HurtAnimations =new List<CharacterAnimationAndFrequency>();
@@ -21,12 +25,14 @@ public class CharacterData : ScriptableObject
 [Serializable]
 public class CombatStats
 {
-    public short maxHP = 30;
-    public short maxMana = 10;
-    public short manaRegen = 2;
-    public short speed = 4;
-    public short power = 2;
-    public short luck = 3;
+    public int maxHP = 30;
+    public int maxMana = 10;
+    public int manaRegen = 2;
+    public int speed = 4;
+    public int power = 2;
+    public int luck = 3;
+    public int accuracy = 100; // => value between 0 - 100
+    public int dodge = 0;      // => value between 0 - 100
 }
 
 [Serializable]

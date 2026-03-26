@@ -44,8 +44,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  initialOffset: {x: -3, y: -5}
-  endOffset: {x: 3, y: -4}
+  initialOffset: {x: 0, y: -5}
+  endOffset: {x: 0, y: -4}
   offsetCurveX:
     serializedVersion: 2
     m_Curve:

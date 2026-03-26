@@ -12,8 +12,8 @@ public class Character : BusRoute, IInspectable
     [HideInInspector] public AbilityHolder abilityHolder;
     [HideInInspector] public EffectHolder effectHolder;
     [HideInInspector] public new CharacterRenderer renderer;
-    [HideInInspector] public CombatStats baseStats;
-    public Stats currentStats;
+    [SerializeField] private CombatStats baseStats;
+    [SerializeField] private Stats currentStats;
 
     bool dead = false;
 
@@ -33,6 +33,156 @@ public class Character : BusRoute, IInspectable
         currentStats.currentMana = baseStats.maxMana;
 
         Sub<CombatStartEvent>(OnCombatStart);
+    }
+
+    public float GetStat(statType StatType)
+    {
+        float value = 0;
+
+        //Convert state type to base values
+        switch (StatType)
+        {
+            case statType.HP_Current:
+                value = baseStats.maxHP;
+                break;
+            case statType.HP_Max:
+                value = currentStats.currentHP;
+                break;
+            case statType.Mana_Current:
+                value = currentStats.currentMana;
+                break;
+            case statType.Mana_Max:
+                value = baseStats.maxMana;
+                break;
+            case statType.Mana_Regen:
+                value = baseStats.manaRegen;
+                break;
+            case statType.Power:
+                value = baseStats.power;
+                break;
+            case statType.Luck:
+                value = baseStats.luck;
+                break;
+            case statType.Speed:
+                value = baseStats.speed;
+                break;
+        }
+
+        //check for status effects
+        foreach(Effect effect in effectHolder.GetEffects())
+        {
+            value = effect.statCalc(StatType, value);
+        }
+
+        return value;
+    }
+    public int GetStatFloor(statType StatType)
+    {
+        float value = 0;
+
+        //Convert state type to base values
+        switch (StatType)
+        {
+            case statType.HP_Current:
+                value = baseStats.maxHP;
+                break;
+            case statType.HP_Max:
+                value = currentStats.currentHP;
+                break;
+            case statType.Mana_Current:
+                value = currentStats.currentMana;
+                break;
+            case statType.Mana_Max:
+                value = baseStats.maxMana;
+                break;
+            case statType.Mana_Regen:
+                value = baseStats.manaRegen;
+                break;
+            case statType.Power:
+                value = baseStats.power;
+                break;
+            case statType.Luck:
+                value = baseStats.luck;
+                break;
+            case statType.Speed:
+                value = baseStats.speed;
+                break;
+        }
+
+        //check for status effects
+        foreach (Effect effect in effectHolder.GetEffects())
+        {
+            value = effect.statCalc(StatType, value);
+        }
+
+        return Mathf.FloorToInt(value);
+    }
+
+    public int GetBaseStat(statType StatType)
+    {
+        int value = 0;
+
+        //Convert state type to base values
+        switch (StatType)
+        {
+            case statType.HP_Current:
+                value = baseStats.maxHP;
+                break;
+            case statType.HP_Max:
+                value = currentStats.currentHP;
+                break;
+            case statType.Mana_Current:
+                value = currentStats.currentMana;
+                break;
+            case statType.Mana_Max:
+                value = baseStats.maxMana;
+                break;
+            case statType.Mana_Regen:
+                value = baseStats.manaRegen;
+                break;
+            case statType.Power:
+                value = baseStats.power;
+                break;
+            case statType.Luck:
+                value = baseStats.luck;
+                break;
+            case statType.Speed:
+                value = baseStats.speed;
+                break;
+        }
+
+        return value;
+    }
+
+    public void ChangeStat(statType StatType, int value)
+    {
+        switch (StatType)
+        {
+            case statType.HP_Current:
+                baseStats.maxHP += value;
+                break;
+            case statType.HP_Max:
+                currentStats.currentHP += value;
+                break;
+            case statType.Mana_Current:
+                currentStats.currentMana += value;
+                break;
+            case statType.Mana_Max:
+                baseStats.maxMana += value;
+                break;
+            case statType.Mana_Regen:
+                baseStats.manaRegen += value;
+                break;
+            case statType.Power:
+                baseStats.power += value;
+                break;
+            case statType.Luck:
+                baseStats.luck += value;
+                break;
+            case statType.Speed:
+                baseStats.speed += value;
+                break;
+        }
     }
 
     private void OnCombatStart(CombatStartEvent ev)
@@ -87,5 +237,17 @@ public class Character : BusRoute, IInspectable
     {
         EventBus.Raise(new InspectedCharacterEvent { character = this });
     }
+}
+
+public enum statType
+{
+    HP_Current,
+    HP_Max,
+    Mana_Current,
+    Mana_Max,
+    Mana_Regen,
+    Power,
+    Luck,
+    Speed,
 }
 

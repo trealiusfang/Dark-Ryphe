@@ -40,9 +40,7 @@ public class AbilityButtonHandler : BusRoute
             //There are not more than 5 available button spots, we want maximum of 4 active aiblities for now.
             if (i == 5 || i >= AbilityButtons.Count || currentUnit.getActiveAbilities()[i] == null) break;
 
-            AbilityButtons[i].SetAbilityInfo(currentUnit.getActiveAbilities()[i]);
-            AbilityButtons[i].GetComponent<Image>().sprite = currentUnit.getActiveAbilities()[i].sprite;
-            AbilityButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = currentUnit.getActiveAbilities()[i].abilityName;
+            AbilityButtons[i].SetAbilityInfo(currentUnit.getActiveAbilities()[i], currentUnit);
             ShowButton(AbilityButtons[i]);
         }
 

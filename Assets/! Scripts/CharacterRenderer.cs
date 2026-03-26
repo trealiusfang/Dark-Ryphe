@@ -43,6 +43,8 @@ public class CharacterRenderer : MonoBehaviour
         CharacterData data = character.charData;
         spriteRenderer.sprite = data.baseSprite;
         material = spriteRenderer.material;
+        spriteRenderer.transform.localPosition = new Vector3(data.spriteOffset.x, data.spriteOffset.y, spriteRenderer.transform.localPosition.z);
+        spriteRenderer.flipX = character.Team == CharacterTeam.Light && data.LookRight ? false : character.Team == CharacterTeam.Dark && data.LookRight ? true : character.Team == CharacterTeam.Light;
 
         AttackAnimations = data.AttackAnimations;
         IdleAnimations = data.IdleAnimations;
@@ -118,14 +120,22 @@ public class CharacterRenderer : MonoBehaviour
         yield return null;
 
         PlayRandomActionClip(CharAnimationType.Death);
+        StartCoroutine(accordToAnimTimer());
+
         EventBus.Raise(new SFXEvent { sfx_string = "unit death" });
         float timeElapsed = 0;
         while (material.GetFloat("_Fade") > 0)
         {
             material.SetFloat("_Fade", 1 - timeElapsed);
-            timeElapsed += .05f;
+            timeElapsed += .05f / character.charData.DeathTimer;
             yield return new WaitForSeconds(.05f);
         }
+    }
+
+    private IEnumerator accordToAnimTimer()
+    {
+        yield return new WaitForSeconds(.35f);
+        actionAnimator.speed = 0;
     }
 
     public void PlayRandomActionClip(CharAnimationType type)

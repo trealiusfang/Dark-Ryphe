@@ -12,7 +12,7 @@ public class CharacterInfoScreen : BusRoute
     [SerializeField] private TextMeshProUGUI Name;
     [SerializeField] private TextMeshProUGUI AlternativeInfo;
     [SerializeField] private Image CharacterImage;
-    [SerializeField] private List<Button> AbilityButtons;
+    [SerializeField] private List<AbilityButton> AbilityButtons;
     [SerializeField] private List<GameObject> Passives;
     [SerializeField] private List<TextMeshProUGUI> StatTexts;
     [Header("Debug")]
@@ -40,10 +40,8 @@ public class CharacterInfoScreen : BusRoute
             Debug.Log("c: " + character.name + ", a: " + character.getAllAbilities().Count);
             if (i < character.getAllAbilities().Count)
             {
-                Debug.Log(i + " Ý UHHH," + character.name);
                 if (!AbilityButtons[i].gameObject.activeSelf) AbilityButtons[i].gameObject.SetActive(true);
-                AbilityButtons[i].GetComponent<Image>().sprite = character.getAllAbilities()[i].sprite;
-                AbilityButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = character.getAllAbilities()[i].abilityName;
+                AbilityButtons[i].SetAbilityInfo(character.getAllAbilities()[i], character);
             } else
             {
                 AbilityButtons[i].gameObject.SetActive(false);
@@ -54,12 +52,12 @@ public class CharacterInfoScreen : BusRoute
         {
             if (StatTexts[i] == null) continue;
 
-            StatTexts[i].text = i == 0 ? character.baseStats.power.ToString() :
-                i == 1 ? character.currentStats.currentHP + "/" + character.baseStats.maxHP :
-                i == 2 ? character.currentStats.currentMana + "/" + character.baseStats.maxMana :
-                i == 3 ? character.baseStats.luck.ToString() :
-                i == 4 ? character.baseStats.speed.ToString() :
-                i == 5 ? character.baseStats.manaRegen.ToString() : "";
+            StatTexts[i].text = i == 0 ? character.GetBaseStat(statType.Power).ToString() :
+                i == 1 ? character.GetBaseStat(statType.HP_Current) + "/" + character.GetBaseStat(statType.HP_Max) :
+                i == 2 ? character.GetBaseStat(statType.Mana_Current) + "/" + character.GetBaseStat(statType.Mana_Max) :
+                i == 3 ? character.GetBaseStat(statType.Luck).ToString() :
+                i == 4 ? character.GetBaseStat(statType.Speed).ToString() :
+                i == 5 ? character.GetBaseStat(statType.Mana_Regen).ToString() : "";
         }
 
         for (int i = 0; i < Passives.Count; i++)

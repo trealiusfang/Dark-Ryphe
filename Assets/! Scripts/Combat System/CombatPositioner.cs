@@ -42,7 +42,6 @@ public class CombatPositioner : BusRoute
         for (int i = 0; i < poses.LightCharacters().Count; i++)
         {
             Character currentCharacter = poses.LightCharacters()[i];
-            currentCharacter.renderer.spriteRenderer.flipX = !currentCharacter.charData.LookRight;
 
             if (currentCharacter == null) continue;
             ResetPosition(currentCharacter);
@@ -51,7 +50,6 @@ public class CombatPositioner : BusRoute
         for (int i = 0; i < poses.DarkCharacters().Count; i++)
         {
             Character currentCharacter = poses.DarkCharacters()[i];
-            currentCharacter.renderer.spriteRenderer.flipX = currentCharacter.charData.LookRight;
 
             if (currentCharacter == null) continue;
             ResetPosition(currentCharacter);

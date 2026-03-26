@@ -45,8 +45,8 @@ public class Ability
     protected virtual IEnumerator PreExecute(Character caster, List<Character> targets)
     {
         EventBus.Raise(new AbilityUsedEvent { caster = caster, ability = this, targets = targets });
-        caster.currentStats.currentMana -= manaCost;
-        yield return new WaitForSeconds(.10f);
+        caster.ChangeStat(statType.Mana_Current, -manaCost);
+        yield return new WaitForSeconds(.50f);
         yield break;
     }
 
@@ -56,10 +56,14 @@ public class Ability
         EventBus.Raise(new AbilityFinishedEvent { caster = caster, ability = this });
         yield break;
     }
+
+    //Animatons!!
+    //Set character animation
     public virtual void PlayCharacterAnimation(Character caster, int index = 0)
     {
         caster.renderer.PlayActionAnimation(CharAnimationType.Attack, index);
     }
+    //For distant objects
     public virtual void PlayEffectAnimation(Character target, Vector3 offset, float size = 1)
     {
         if (target == null || abilityEffectClip == null)
@@ -71,6 +75,11 @@ public class Ability
             
             EventBus.Raise(new BattleEffectEvent { position = spawnPos, effectAnimation = abilityEffectClip, effectSize = size});
         }
+    }
+
+    public virtual string GetAbilityDescription(Character caster)
+    {
+        return "";
     }
 
 

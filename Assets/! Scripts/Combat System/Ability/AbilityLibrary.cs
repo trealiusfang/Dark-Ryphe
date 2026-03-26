@@ -39,6 +39,13 @@ public static class AbilityLibrary
 
             AbilityLogic = EndTurnLogic;
         }
+
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Mana_Regen), caster, new ActionLibrary.ManaIncrease { actionType = ActionType.StatIncreaseManaRegen});
+            return $"This unit ends its turn, gaining mana based on mana regen ({value})";
+        }
+
         protected override IEnumerator PostExecute(Character caster, List<Character> targets)
         {
             yield return null;
@@ -47,7 +54,7 @@ public static class AbilityLibrary
             Character caster,
             List<Character> targets, Ability ability)
         {
-            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, value = caster.baseStats.manaRegen, target = caster});
+            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, value = caster.GetStat(statType.Power), target = caster, actionType = ActionType.StatIncreaseManaRegen});
             yield return new WaitForSeconds(0.3f);
             EventBus.Raise(new TurnEndEvent { unit = caster });
         }
@@ -63,6 +70,11 @@ public static class AbilityLibrary
 
             AbilityLogic = WickedSlashLogic;
         }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = caster.GetStatFloor(statType.Power);
+            return $"Deals {value} damage, based on units power.";
+        }
         public static IEnumerator WickedSlashLogic(
             Character caster,
             List<Character> targets, Ability ability)
@@ -72,7 +84,7 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power, caster = caster});
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.GetStat(statType.Power), caster = caster});
             }
         }
     }
@@ -87,6 +99,11 @@ public static class AbilityLibrary
 
             AbilityLogic = HeavySlashLogic;
         }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * 1.5f, caster, new ActionLibrary.DamageAction { });
+            return $"Deals heavy power scaling damage ({value})";
+        }
         public static IEnumerator HeavySlashLogic(
             Character caster,
             List<Character> targets, Ability ability)
@@ -96,7 +113,7 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * 1.5f, caster = caster});
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.GetStat(statType.Power) * 1.5f, caster = caster});
             }
         }
     }
@@ -107,8 +124,13 @@ public static class AbilityLibrary
             abilityName = "Gaster Blaster";
             manaCost = 10;
             targetType = TargetType.AoEEnemy;
-            targetSpots = new short[] { 1, 1, 0, 0 };
+            targetSpots = new short[] { 1, 1, 1, 1 };
             AbilityLogic = GasterBlasterLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * .75f, caster, new ActionLibrary.DamageAction { });
+            return $"Deals low AoE damage with high cost ({value})";
         }
         public static IEnumerator GasterBlasterLogic(
             Character caster,
@@ -119,7 +141,7 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * .75f, caster = caster });
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.GetStat(statType.Power) * .75f, caster = caster });
             }
         }
     }
@@ -137,24 +159,28 @@ public static class AbilityLibrary
             abilityValue = 5;
             AbilityLogic = ManaStealLogic;
         }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = abilityValue;
+            return $"Steal {value} mana from an ally";
+        }
         public static IEnumerator ManaStealLogic(
             Character caster,
             List<Character> targets, Ability ability)
         {
 
             yield return new WaitForSeconds(0.1f);
-
             foreach (var target in targets)
             {
-                float value = target.currentStats.currentMana < ability.abilityValue ? target.currentStats.currentMana : ability.abilityValue;
+                float value = target.GetStat(statType.Mana_Current) < ability.abilityValue ? target.GetStat(statType.Mana_Current) : ability.abilityValue;
                 EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { target = caster, value = value, caster = caster });
-                target.currentStats.currentMana -= Mathf.FloorToInt(value);
+                target.ChangeStat(statType.Mana_Current,Math.RoundValue(value));
             }
         }
 
         public override bool unitTargetable(Character target)
         {
-            if (target.currentStats.currentMana > 0)
+            if (target.GetStat(statType.Mana_Current) > 0)
             {
                 return true;
             }
@@ -171,6 +197,12 @@ public static class AbilityLibrary
             targetType = TargetType.Self;
 
             AbilityLogic = ToughenUpLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = 5;
+            int value2 = 2;
+            return $"Get +{value2} BIGGER, and heal for {value}";
         }
         public static IEnumerator ToughenUpLogic(
             Character caster,
@@ -196,6 +228,11 @@ public static class AbilityLibrary
             targetSpots = new short[] { 1, 0, 0, 0 };
             AbilityLogic = SlickAttackLogic;
         }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * 1.5f, caster, new ActionLibrary.DamageAction { });
+            return $"Deals heavy power scaling damage ({value}), front-line focused attack";
+        }
         public static IEnumerator SlickAttackLogic(
             Character caster,
             List<Character> targets, Ability ability)
@@ -206,7 +243,7 @@ public static class AbilityLibrary
             yield return new WaitForSeconds(0.2f);
             foreach (var target in targets)
             {
-                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.baseStats.power * 1.5f, caster = caster });
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { target = target, value = caster.GetStat(statType.Power) * 1.5f, caster = caster });
             }
         }
     }
@@ -222,6 +259,10 @@ public static class AbilityLibrary
             cooldownType = CooldownType.Combat;
 
             AbilityLogic = _AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            return "Applies Riposte status effect to this unit.";
         }
         public static IEnumerator _AbilityLogic(
             Character caster,
@@ -244,9 +285,14 @@ public static class AbilityLibrary
             abilityName = "Chemical Throw";
             manaCost = 6;
             targetType = TargetType.AoEEnemy;
-            abilityValue = 3;
+            abilityValue = 4;
             targetSpots = new short[] { 1, 1, 0, 0 };
             AbilityLogic = _AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = abilityValue;
+            return $"Applies AOE +{value} Venom , front-line focused attack.";
         }
         public static IEnumerator _AbilityLogic(
             Character caster,
@@ -257,7 +303,7 @@ public static class AbilityLibrary
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyEffect(new EffectLibrary.Venom { caster = caster, target = target, value = ability.abilityValue, duration = 3, durationType = EffectDuration.Round });
+                EffectSystem.ApplyEffect(new EffectLibrary.Venom { caster = caster, target = target, value = ability.abilityValue, duration = ability.abilityValue, durationType = EffectDuration.Round });
             }
         }
     }
@@ -288,7 +334,7 @@ public static class AbilityLibrary
                 randomEffect.target = target;
                 int value = 1;
 
-                if (randomEffect.effectType == EffectType.All)
+                if (randomEffect.effectType == EffectType.both)
                 {
                     float r = UnityEngine.Random.value;
 
@@ -329,11 +375,11 @@ public static class AbilityLibrary
             {
                 if (r < 20)
                 {
-                    EffectSystem.ApplyAction(new ActionLibrary.Heal { caster = caster, target = target, value = target.baseStats.maxHP * .1f});
+                    EffectSystem.ApplyAction(new ActionLibrary.Heal { caster = caster, target = target, value = target.GetStat(statType.HP_Max) * .1f});
                 }
                 else if (r < 40)
                 {
-                    EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, target = target, value = target.baseStats.maxMana * .2f});
+                    EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, target = target, value = target.GetStat(statType.Mana_Max) * .2f});
                 }
                 else if (r < 60)
                 {
@@ -345,7 +391,7 @@ public static class AbilityLibrary
                 }
             }
             yield return new WaitForSeconds(.3f);
-            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, target = caster, value = caster.baseStats.manaRegen });
+            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, target = caster, value = caster.GetStat(statType.Mana_Regen) });
 
             EventBus.Raise(new TurnEndEvent { unit = caster });
 
@@ -435,21 +481,21 @@ public static class AbilityLibrary
 
                 if (r < .5f)
                 {
-                    EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = target.baseStats.power / 2});
+                    EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = target.GetStat(statType.Power) / 2});
                     yield return new WaitForSeconds(.3f);
                 }
                 r = UnityEngine.Random.value;
 
                 if (r < .5f)
                 {
-                    EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = target.baseStats.power / 2});
+                    EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = target.GetStat(statType.Power) / 2});
                     yield return new WaitForSeconds(.3f);
                 }
                 r = UnityEngine.Random.value;
 
                 if (r < .5f)
                 {
-                    EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = target.baseStats.power / 2});
+                    EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = target.GetStat(statType.Power) / 2});
                     yield return new WaitForSeconds(.3f);
                 }
             }
@@ -511,6 +557,43 @@ public static class AbilityLibrary
 
 
     #endregion
+
+    #region Kool Bird
+
+    public class DamageRush : Ability
+    {
+        public DamageRush()
+        {
+            abilityName = "Damage Rush";
+            manaCost = 12;
+            targetType = TargetType.SingleEnemy;
+
+            targetSpots = new short[] { 1, 0, 0, 0 };
+            AbilityLogic = _AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * .33f, caster, new ActionLibrary.DamageAction { });
+            return $"Deals {value} damage to all enemy units, scales with power.";
+        }
+
+        public static IEnumerator _AbilityLogic(
+            Character caster,
+            List<Character> targets, Ability ability)
+        {
+            ability.PlayCharacterAnimation(caster, 1);
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            yield return new WaitForSeconds(.4f);
+            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilityAlternativeClip });
+            yield return new WaitForSeconds(.3f);
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = caster.GetStat(statType.Speed) * 2 });
+            }
+        }
+    }
+
+    #endregion
     public class RaiseFromTheDark : Ability
     {
         public RaiseFromTheDark()
@@ -521,6 +604,11 @@ public static class AbilityLibrary
 
             targetSpots = new short[] { 1, 1, 1, 1 };
             AbilityLogic = _AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * .33f, caster, new ActionLibrary.DamageAction { });
+            return $"Deals {value} damage to all enemy units, scales with power.";
         }
         public static IEnumerator _AbilityLogic(
             Character caster,
@@ -538,7 +626,7 @@ public static class AbilityLibrary
             yield return new WaitForSeconds(.3f);
             foreach (var target in targets)
             {
-                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = caster.baseStats.power * .3f});
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = caster.GetStat(statType.Power) * .33f});
             }
         }
     }

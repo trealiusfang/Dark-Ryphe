@@ -16,7 +16,14 @@ public class CombatEndEvent : EventData
     public CharacterTeam winningTeam;
 }
 
+public class RoundStartEvent : EventData { }
+public class RoundEndEvent : EventData { }
+
 public class TurnStartEvent : EventData 
+{
+    public Character unit;
+}
+public class TurnEndEvent : EventData
 {
     public Character unit;
 }
@@ -46,19 +53,7 @@ public class TargetSelectedEvent : EventData
     public Ability bindedAbility;
 }
 
-public class DamageEvent : EventData
-{
-    public Character attacker;
-    public Character target;
-    public int damage;
-}
-
 public class UnitDeathEvent : EventData
-{
-    public Character unit;
-}
-
-public class TurnEndEvent : EventData
 {
     public Character unit;
 }
@@ -93,4 +88,11 @@ public class BattleEffectEvent : EventData
     public Vector3 position;
     public AnimationClip effectAnimation;
     public float effectSize;
+}
+
+public class AbilityHoverEvent : EventData
+{
+    public Character character;
+    public Ability ability;
+    public bool intoHover;
 }

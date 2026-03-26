@@ -17,7 +17,7 @@ MonoBehaviour:
   characterStats:
     maxHP: 30
     maxMana: 20
-    manaRegen: 5
+    manaRegen: 12
     speed: 5
     power: 3
     luck: 3
@@ -27,6 +27,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0513213ce96b09e4d9e1faaee433f99d, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
   baseSprite: {fileID: 374495580, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
+  LookRight: 1
+  spriteOffset: {x: 0, y: 0}
+  DeathTimer: 1
   AttackAnimations: []
   IdleAnimations: []
   HurtAnimations: []

@@ -56,8 +56,21 @@ public class GameInputManager : MonoBehaviour
             if (clickable != null)
             {
                 clickable.OnInspect();
+                Debug.Log(hit.transform.name + " was hit!");
             }
         }
+    }
+
+    public void OnPoint(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+
+    }
+
+    public static Vector2 mousePosition()
+    {
+        return Mouse.current.position.value;
     }
 
     public static bool IsPointerOverUI()

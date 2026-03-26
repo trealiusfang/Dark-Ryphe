@@ -19,13 +19,13 @@ public static class ActionLibrary
 
             if (!isCrit)
             {
-                target.TakeDamage(Mathf.FloorToInt(value));
+                target.TakeDamage(Math.RoundValue(value));
                 Debug.Log(target.charData.name + " was attacked, lost " + value + " health! By: " + (caster != null ? caster.name : ""));
                 //Call effects
                 EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), character = target, textAnimType = TextAnimType.Damage });
             } else
             {
-                target.TakeDamage(Mathf.FloorToInt(value * 1.5f));
+                target.TakeDamage(Math.RoundValue(value * 1.5f));
                 Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(value * 1.5f) + " health! By: " + (caster != null ? caster.name : ""));
                 //Call effects
                 EventBus.Raise(new SFXEvent { sfx_string = "Critical" });
@@ -47,7 +47,7 @@ public static class ActionLibrary
         {
             if (target == null || target.isDead()) yield break;
 
-            target.TakeDamage(Mathf.FloorToInt(value));
+            target.TakeDamage(Math.RoundValue(value));
             Debug.Log(target.charData.name + " lost " + value + " health, by venom!");
             //Call effects
             EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), character = target, textAnimType = TextAnimType.Venom });
@@ -66,14 +66,13 @@ public static class ActionLibrary
 
         public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
         {
-            int actualValue = (target.baseStats.maxMana - target.currentStats.currentMana - Mathf.FloorToInt(value)) < 0 ? target.baseStats.maxMana - target.currentStats.currentMana : Mathf.FloorToInt(value);
-            actualValue = (target.currentStats.currentMana + actualValue) < 0 ? -target.currentStats.currentMana : actualValue;
+            int actualValue = (int)((target.GetStat(statType.Mana_Max) - target.GetStat(statType.Mana_Current) - Mathf.Round(value)) < 0 ? target.GetStat(statType.Mana_Max) - target.GetStat(statType.Mana_Current) : Mathf.FloorToInt(value));
+            actualValue = (int)((target.GetStat(statType.Mana_Current) + actualValue) < 0 ? -target.GetStat(statType.Mana_Current) : actualValue);
 
-            target.currentStats.currentMana += actualValue;
-
+            target.ChangeStat(statType.Mana_Current, actualValue);
             Debug.Log(target.name + " gained " + value + " mana!");
             //Call effects
-            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " MANA", character = target, textAnimType = TextAnimType.Freeze });
+            EventBus.Raise(new BattleTextEvent { text = "+" + Math.RoundValue(actualValue) + " MANA", character = target, textAnimType = TextAnimType.Freeze });
             yield return null;
         }
     }
@@ -90,14 +89,14 @@ public static class ActionLibrary
         {
             value = isCrit ? value * 1.5f : value;
 
-            int actualValue = (target.baseStats.maxHP - target.currentStats.currentHP - Mathf.FloorToInt(value)) < 0 ? target.baseStats.maxHP - target.currentStats.currentHP : Mathf.FloorToInt(value);
+            int actualValue = (int)(target.GetStat(statType.HP_Max) - (target.GetStat(statType.HP_Current) - Math.RoundValue(value)) < 0 ? (target.GetStat(statType.HP_Current) - target.GetStat(statType.HP_Max))  : Mathf.FloorToInt(value));
             if (actualValue < 0) actualValue = 0;
 
-            target.currentStats.currentHP += actualValue;
+            target.ChangeStat(statType.HP_Current, actualValue);
             Debug.Log(caster.name + " gained " + actualValue + " HP!");
             //Call effects
 
-            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " HP", character = target, textAnimType = TextAnimType.Heal, isCrit = isCrit });
+            EventBus.Raise(new BattleTextEvent { text = "+" + Math.RoundValue(actualValue) + " HP", character = target, textAnimType = TextAnimType.Heal, isCrit = isCrit });
             yield return null;
         }
     }
@@ -112,13 +111,13 @@ public static class ActionLibrary
 
         public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
         {
-            float actualValue = (target.baseStats.luck + value) < 0 ? -target.baseStats.luck : value;
+            float actualValue = (target.GetStat(statType.Luck) + value) < 0 ? -target.GetStat(statType.Luck) : value;
 
-            target.baseStats.luck += (short)Mathf.FloorToInt(actualValue);
+            target.ChangeStat(statType.Luck, Math.RoundValue(actualValue));
 
             Debug.Log(target.name + " gained " + value + " luck!");
             //Call effects
-            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(actualValue) + " Luck", character = target, textAnimType = TextAnimType.Shock });
+            EventBus.Raise(new BattleTextEvent { text = "+" + Math.RoundValue(actualValue) + " Luck", character = target, textAnimType = TextAnimType.Shock });
             yield return null;
         }
     }
@@ -135,9 +134,44 @@ public static class ActionLibrary
         public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
         {
             if (value < 0)
-            EventBus.Raise(new BattleTextEvent { text = "-" + Mathf.FloorToInt(Mathf.Abs(value)) + " Money", character = target, textAnimType = TextAnimType.Metallic });
+            EventBus.Raise(new BattleTextEvent { text = "-" + Math.RoundValue(Mathf.Abs(value)) + " Money", character = target, textAnimType = TextAnimType.Metallic });
             if (value > 0)
-            EventBus.Raise(new BattleTextEvent { text = "+" + Mathf.FloorToInt(value) + " Money", character = target, textAnimType = TextAnimType.Premium });
+            EventBus.Raise(new BattleTextEvent { text = "+" + Math.RoundValue(value) + " Money", character = target, textAnimType = TextAnimType.Premium });
+            yield return null;
+        }
+    }
+
+    public class Dodge : Action
+    {
+        public Dodge() 
+        {
+            actionType = ActionType.None;
+
+
+            ActionLogic = newActionLogic;
+        }
+
+        public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
+        {
+            EventBus.Raise(new BattleTextEvent { text = "DODGE!", character = target, textAnimType = TextAnimType.Metallic });
+
+            yield return null;
+        }
+    }
+    public class Miss : Action
+    {
+        public Miss()
+        {
+            actionType = ActionType.None;
+
+
+            ActionLogic = newActionLogic;
+        }
+
+        public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
+        {
+            EventBus.Raise(new BattleTextEvent { text = "MISS!", character = target, textAnimType = TextAnimType.Metallic });
+
             yield return null;
         }
     }

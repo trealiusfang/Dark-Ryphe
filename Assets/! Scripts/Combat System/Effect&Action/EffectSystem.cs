@@ -1,8 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 public class EffectSystem : MonoBehaviour
 {
     private static ActionResponse actionResponse;
@@ -19,7 +20,7 @@ public class EffectSystem : MonoBehaviour
         List<Effect> effects = action.caster.effectHolder.GetEffects();
 
         bool isCrit = false;
-        int luckAmount = action.caster.baseStats.luck;
+        int luckAmount = action.caster.GetStatFloor(statType.Luck);
 
         int r = UnityEngine.Random.Range(15, 100);
 
@@ -29,7 +30,7 @@ public class EffectSystem : MonoBehaviour
         {
             if (effects[i].responseType == EffectResponseType.BeforeApply)
             {
-                value = effects[i].calc(action,value, EffectedType.Dealer);
+                value = effects[i].actionCalc(action,value, EffectedType.Dealer);
             }
         }
 
@@ -47,7 +48,7 @@ public class EffectSystem : MonoBehaviour
             {
                 if (effects[i].responseType == EffectResponseType.BeforeApply)
                 {
-                    value = effects[i].calc(action, value, EffectedType.Reciever);
+                    value = effects[i].actionCalc(action, value, EffectedType.Reciever);
                 }
             }
         }
@@ -133,7 +134,7 @@ public class EffectSystem : MonoBehaviour
         {
             if (effects[i].responseType == EffectResponseType.BeforeApply)
             {
-                value = effects[i].calc(action, value, EffectedType.Dealer);
+                value = effects[i].actionCalc(action, value, EffectedType.Dealer);
             }
         }
 
@@ -144,7 +145,7 @@ public class EffectSystem : MonoBehaviour
             {
                 if (effects[i].responseType == EffectResponseType.BeforeApply)
                 {
-                    value = effects[i].calc(action, value, EffectedType.Dealer);
+                    value = effects[i].actionCalc(action, value, EffectedType.Dealer);
                 }
             }
         } 
@@ -167,6 +168,21 @@ public class EffectSystem : MonoBehaviour
     public static void ChangeTarget(Character newTarget)
     {
         target = newTarget;
+    }
+
+    public static int GetEffectCalculation(float baseValue, Character character, Action action)
+    {
+        List<Effect> effects = character.effectHolder.GetEffects();
+
+        for (int i = 0; i < effects.Count; i++)
+        {
+            if (effects[i].responseType == EffectResponseType.BeforeApply)
+            {
+                baseValue = effects[i].actionCalc(action, baseValue, EffectedType.Dealer);
+            }
+        }
+
+        return Math.RoundValue(baseValue);
     }
 }
 

@@ -70,6 +70,7 @@ public class GameInitializer : MonoBehaviour
             if (UI.transform.GetChild(i).GetComponent<Canvas>() != null)
             UI.transform.GetChild(i).GetComponent<Canvas>().worldCamera = _mainCamera;
         }
+        _audioService.PlayMusic("No Devil Lived On");
     }
 
     private async UniTask BeginGame()

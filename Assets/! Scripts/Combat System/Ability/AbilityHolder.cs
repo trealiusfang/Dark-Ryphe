@@ -31,7 +31,7 @@ public class AbilityHolder : BusRoute
 
     public bool abilityAvailable(Ability ability)
     {
-        if (ability.manaCost > character.currentStats.currentMana && ability.manaCost > 0)
+        if (ability.manaCost > character.GetStat(statType.Mana_Current) && ability.manaCost > 0)
         {
             return false;
         }

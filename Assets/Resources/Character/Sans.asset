@@ -16,8 +16,8 @@ MonoBehaviour:
   alternativeInfo: Weakest enemy, how much easier can it get?
   characterStats:
     maxHP: 20
-    maxMana: 15
-    manaRegen: 5
+    maxMana: 25
+    manaRegen: 10
     speed: 15
     power: 12
     luck: 10
@@ -26,6 +26,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0513213ce96b09e4d9e1faaee433f99d, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
   baseSprite: {fileID: 21300000, guid: 822fe0f0254a3e946a5f726e3136373a, type: 3}
+  LookRight: 1
+  spriteOffset: {x: 0, y: 0}
+  DeathTimer: 1
   AttackAnimations: []
   IdleAnimations: []
   HurtAnimations: []

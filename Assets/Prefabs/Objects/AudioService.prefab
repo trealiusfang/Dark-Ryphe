@@ -318,5 +318,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 457771d0864a67842a71c2fb0a3fdc1a, type: 3}
   - Name: Swaying Daises
     clip: {fileID: 8300000, guid: d09fa46398af0499b8e39053d5dfd238, type: 3}
+  - Name: No Devil Lived On
+    clip: {fileID: 8300000, guid: 0b8f166f672ca2d4da34e737e16caf95, type: 3}
   SFXSource: {fileID: 7410224517492786657}
   MusicSource: {fileID: 6631120878078769140}

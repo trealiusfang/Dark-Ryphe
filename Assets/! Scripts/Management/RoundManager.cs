@@ -26,7 +26,7 @@ public class TurnManager : BusRoute
         if (units.Length == 0) { Debug.Log("There isn't anybody"); }
 
         var ordered = units
-            .OrderByDescending(u => u.baseStats.speed);
+            .OrderByDescending(u => u.GetStat(statType.Speed));
 
         turnQueue = new Queue<Character>(ordered);
     }

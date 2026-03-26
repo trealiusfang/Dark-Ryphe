@@ -12,18 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8407e4c46b0aabf42886579a6da4657a, type: 3}
   m_Name: Bringer Of Death
   m_EditorClassIdentifier: 
-  characterName: Bringer Of Death
-  alternativeInfo: Loves pet dogs
+  characterName: Farkeep
+  alternativeInfo: He won't let you pass
   characterStats:
-    maxHP: 65
-    maxMana: 12
-    manaRegen: 6
-    speed: 5
-    power: 8
-    luck: 5
-  Abilities: []
-  baseSprite: {fileID: -7605932586306218444, guid: 38e26291822c9b9479504c21a5a98126, type: 3}
-  AttackAnimations: []
-  IdleAnimations: []
-  HurtAnimations: []
-  DeathAnimations: []
+    maxHP: 80
+    maxMana: 25
+    manaRegen: 16
+    speed: 1
+    power: 10
+    luck: 9
+  Abilities:
+  - {fileID: 11400000, guid: afd47aea436a26a42afa404cb8f80892, type: 2}
+  - {fileID: 11400000, guid: f623374ad3f01714494aeea9ba4e5fcd, type: 2}
+  - {fileID: 11400000, guid: bf1243eb0d1e6f048b9ff5890af54043, type: 2}
+  - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  baseSprite: {fileID: 2822720815099711002, guid: 38e26291822c9b9479504c21a5a98126, type: 3}
+  LookRight: 0
+  spriteOffset: {x: -2.5, y: 0}
+  DeathTimer: 2
+  AttackAnimations:
+  - {fileID: 7400000, guid: c99207e72a7f9ac4a983bc66ea077909, type: 2}
+  - {fileID: 7400000, guid: 7ab3e66d872f3704092617677c4a1dc6, type: 2}
+  IdleAnimations:
+  - clip: {fileID: 7400000, guid: 890c5833f64f429459ab4356e2b8f775, type: 2}
+    frequency: 0
+  HurtAnimations:
+  - clip: {fileID: 7400000, guid: 1192ecea3d3a5994ead9ced2fbd0726b, type: 2}
+    frequency: 0
+  DeathAnimations:
+  - clip: {fileID: 7400000, guid: 649fc673d9eaff74e932fbfbd152882f, type: 2}
+    frequency: 0

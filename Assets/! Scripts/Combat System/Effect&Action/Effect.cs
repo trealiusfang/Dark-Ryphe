@@ -32,7 +32,12 @@ public class Effect
         if (ApplyEffects != null)
             yield return ApplyEffects(target, value);
     }
-    public virtual float calc(Action action,float _value, EffectedType type)
+    public virtual float actionCalc(Action action,float _value, EffectedType type)
+    {
+        return value;
+    }
+
+    public virtual float statCalc(statType statType,float _value)
     {
         return value;
     }
@@ -55,7 +60,7 @@ public class Effect
 public enum EffectedType
 {
     Reciever,
-    Dealer
+    Dealer,
 }
 
 public enum EffectResponseType
@@ -77,5 +82,5 @@ public enum EffectType
     none,
     positive,
     malicious,
-    All,
+    both,
 }

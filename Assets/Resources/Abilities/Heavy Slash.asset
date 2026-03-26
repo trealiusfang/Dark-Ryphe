@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b904a4074b26e7e4b9fdafe2c9cb1786, type: 3}
   m_Name: Heavy Slash
   m_EditorClassIdentifier: 
-  abilitySprite: {fileID: 21300000, guid: 0389074d1deba1c448d45812db40c0df, type: 3}
-  abilitySuccessClip: {fileID: 8300000, guid: c6241d89f9e1d914fb70398807f9fa1b, type: 3}
+  abilitySprite: {fileID: 21300000, guid: eecb85004343b0e4d8b78fd7f9877b32, type: 3}
+  abilitySuccessClip: {fileID: 8300000, guid: 4c1ebb6518fc85649ad0b07bc30484f5, type: 3}
+  abilityAlternativeClip: {fileID: 0}
+  abilityEffectClip: {fileID: 0}
