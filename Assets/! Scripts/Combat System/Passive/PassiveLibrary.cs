@@ -64,8 +64,65 @@ public static class PassiveLibrary
             }
         }
     }
+    #region huntress
+    public class SigilOfTheForest : Passive
+    {
+        public bool onRound = false;
+        public SigilOfTheForest()
+        {
+            passiveName = "Sigil Of The Forest";
+        }
+        public override void EnablePassive()
+        {
+            Sub<ActionHappenedEvent>(OnAction);
+            Sub<RoundEndEvent>(OnRoundEnd);
+        }
 
+        public override void OnAction(ActionHappenedEvent ev)
+        {
+            if (ev.action.target == assignedUnit)
+            {
+                if (ev.action.actionType == ActionType.DamagePhysical || ev.action.actionType == ActionType.DamageMagic)
+                {
+                    onRound = true;
+                }
+            }   
+        }
 
+        public override void OnRoundEnd(RoundEndEvent ev)
+        {
+            if (!onRound)
+            {
+                EffectSystem.ApplyEffect(new EffectLibrary.SpeedBoost { caster = assignedUnit, target = assignedUnit, value = 1});
+            } else
+            {
+                onRound = false;
+            }
+        }
+    }
+
+    public class CleanMark : Passive
+    {
+        public CleanMark()
+        {
+            passiveName = "Clean Mark";
+        }
+
+        public override float actionCalc(Action action, float _value, EffectedType type)
+        {
+            if (type == EffectedType.Dealer)
+            {
+                if (action.actionType == ActionType.DamagePhysical ||action.actionType == ActionType.DamageMagic)
+                {
+                    _value = 2;
+                }
+            }
+
+            return _value;
+        }
+    }
+
+    #endregion
 
     public static Passive StringToPassive(string abilityName)
     {

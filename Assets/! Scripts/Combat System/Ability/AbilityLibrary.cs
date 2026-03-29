@@ -593,6 +593,7 @@ public static class AbilityLibrary
     }
 
     #endregion
+    #region bossboy
     public class RaiseFromTheDark : Ability
     {
         public RaiseFromTheDark()
@@ -629,7 +630,143 @@ public static class AbilityLibrary
             }
         }
     }
+    #endregion
 
+    #region Huntress
+
+    public class SubtleClaw : Ability
+    {
+        public SubtleClaw()
+        {
+            abilityName = "Subtle Claw";
+            manaCost = 4;
+            targetType = TargetType.SingleEnemy;
+            abilityValue = 1;
+            targetSpots = new short[] { 1, 1, 1, 1 };
+            _abilityLogic = AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = abilityValue * 3;
+            int value2 = abilityValue + caster.GetStatFloor(statType.Power);
+            return $"Applies +{value} Bleed and deals {value2} damage scaling with power, can attack to any spot.";
+        }
+        public override IEnumerator AbilityLogic(
+            Character caster,
+            List<Character> targets)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
+            yield return new WaitForSeconds(.5f);
+
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = abilityValue + caster.GetStat(statType.Power)});
+                EffectSystem.ApplyEffect(new EffectLibrary.Bleed { caster = caster, target = target, value = abilityValue * 3, duration = abilityValue * 3, durationType = EffectDuration.Round });
+            }
+        }
+    }
+
+    public class Ocultarse : Ability
+    {
+        public Ocultarse()
+        {
+            abilityName = "Ocultarse";
+            manaCost = 3;
+            targetType = TargetType.Self;
+            abilityValue = 2;
+
+            cooldownTime = 1;
+            cooldownType = CooldownType.Round;
+            _abilityLogic = AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = abilityValue;
+            return $"Evade the next enemy attack, castable once per turn.";
+        }
+        public override IEnumerator AbilityLogic(
+            Character caster,
+            List<Character> targets)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
+            yield return new WaitForSeconds(.7f);
+
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyEffect(new EffectLibrary.DodgeInstinct { caster = caster, target = target, value = abilityValue });
+            }
+        }
+    }
+
+    public class IntimidatingHowl : Ability
+    {
+        public IntimidatingHowl()
+        {
+            abilityName = "Intimidating Howl";
+            manaCost = 3;
+            targetType = TargetType.AoEEnemy;
+            targetSpots = new short[] { 1, 1, 1, 1 };
+
+            cooldownTime = 1;
+            cooldownType = CooldownType.Round;
+            _abilityLogic = AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = abilityValue;
+            return $"Lower ALL the enemies damage for 1 turn.";
+        }
+        public override IEnumerator AbilityLogic(
+            Character caster,
+            List<Character> targets)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
+            yield return new WaitForSeconds(.7f);
+
+            foreach (var target in targets)
+            {
+                EffectSystem.ApplyEffect(new EffectLibrary.Weakness { caster = caster, target = target, value = 1, duration = 1, durationType = EffectDuration.Round});
+            }
+        }
+    }
+
+    public class FinishHim : Ability
+    {
+        public FinishHim()
+        {
+            abilityName = "Finish Him";
+            manaCost = 6;
+            targetType = TargetType.SingleEnemy;
+            targetSpots = new short[] { 0, 0, 1, 1 };
+
+            cooldownTime = 3;
+            cooldownType = CooldownType.Round;
+            _abilityLogic = AbilityLogic;
+        }
+        public override string GetAbilityDescription(Character caster)
+        {
+            int value = abilityValue + caster.GetStatFloor(statType.Power);
+            int value2 = abilityValue+ 2 + caster.GetStatFloor(statType.Power) * 2;
+            return $"Deals {value} damage to back-line, deals {value2} damage if the enemy is marked.";
+        }
+
+        public override IEnumerator AbilityLogic(
+            Character caster,
+            List<Character> targets)
+        {
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
+            yield return new WaitForSeconds(.7f);
+
+            foreach (var target in targets)
+            {
+                float value = target.effectHolder.getEffect("Mark") != null ? abilityValue + 2 + caster.GetStatFloor(statType.Power) * 2 : abilityValue + caster.GetStatFloor(statType.Power);
+                EffectSystem.ApplyAction(new ActionLibrary.DamageAction { caster = caster, target = target, value = value, critSound = abilityCritClip });
+            }
+        }
+    }
+
+
+    #endregion
 
     public static Ability StringToAbility(string abilityName)
     {

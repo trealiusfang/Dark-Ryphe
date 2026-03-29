@@ -26,6 +26,13 @@ public class EffectHolder : BusRoute
         effects.Add(effect);
     }
 
+    public void RemoveEffect(Effect effect)
+    {
+        if (effects.Contains(effect))
+        {
+            effects.Remove(effect);
+        }
+    }
     private void LowerEffectCooldown(TurnEndEvent ev)
     {
         if (ev.unit == this)

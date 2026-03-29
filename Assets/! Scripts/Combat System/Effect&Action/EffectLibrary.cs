@@ -152,6 +152,70 @@ public static class EffectLibrary
             yield return base.WaitTimer();
         }
     }
+    public class Bleed : Effect
+    {
+        public Bleed()
+        {
+            EffectName = "Bleed";
+            effectType = EffectType.malicious;
+
+            ApplyEffects = OnApply;
+            durationType = EffectDuration.Round;
+        }
+        public override IEnumerator OnApply(Character target, float value)
+        {
+            EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+"+ value + " BLEED", textAnimType = TextAnimType.Damage });
+            yield return null;
+        }
+
+        public override IEnumerator OnTurnStart(TurnStartEvent ev)
+        {
+            EffectSystem.ApplyActionImmidiate(new ActionLibrary.DamageAction { target = ev.unit, value = value, caster = caster });
+
+            yield return base.WaitTimer();
+        }
+    }
+
+    public class DodgeInstinct : Effect
+    {
+        public DodgeInstinct()
+        {
+            responseType = EffectResponseType.OnApply;
+            EffectName = "Dodge Instinct";
+            effectType = EffectType.positive;
+
+            ApplyEffects = OnApply;
+            value = 1;
+            durationType = EffectDuration.Infinite;
+        }
+        public override IEnumerator OnApply(Character target, float value)
+        {
+            EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+" + value + " Dodge", textAnimType = TextAnimType.Metallic });
+            yield return null;
+        }
+
+        public override IEnumerator Execute(Action action, EffectedType type)
+        {
+            Debug.Log("dod called");
+            if (value <= 0)
+            {
+                action.target.effectHolder.RemoveEffect(this);
+                Debug.Log("Removed");
+                yield break;
+            }
+            if (type == EffectedType.Reciever)
+            {
+                if (action.actionType == ActionType.DamagePhysical || action.actionType == ActionType.DamageMagic)
+                {
+                    Debug.Log("dodge");
+                    EffectSystem.SetActionResponse(ActionResponse.Dodge);
+                    value -= 1;
+                }
+            }
+
+            yield return null;
+        }
+    }
 
     public class BigAndSmall : Effect
     {
@@ -324,6 +388,24 @@ public static class EffectLibrary
         }
     }
 
+    public class Mark : Effect
+    {
+        public Mark()
+        {
+            EffectName = "Mark";
+            effectType = EffectType.malicious;
+
+            durationType = EffectDuration.Round;
+            ApplyEffects = OnApply;
+        }
+        public override IEnumerator OnApply(Character target, float value)
+        {
+            if (value == 0) yield break;
+
+            EventBus.Raise(new BattleTextEvent { position = target.transform.position, text = "+"  + "Marked!", textAnimType = TextAnimType.Premium });
+            yield return null;
+        }
+    }
 
     public static Effect GetARandomEffect()
     {

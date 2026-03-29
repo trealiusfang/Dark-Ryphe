@@ -79,6 +79,7 @@ public class MusicEvent : EventData
 public class BattleTextEvent : EventData
 {
     public string text;
+    public int value;
     public Vector2 position;
     public Character character;
     public TextAnimType textAnimType;
@@ -102,4 +103,9 @@ public class AbilityHoverEvent : EventData
     public Character character;
     public Ability ability;
     public bool intoHover;
+}
+
+public class ActionHappenedEvent : EventData
+{
+    public Action action;
 }

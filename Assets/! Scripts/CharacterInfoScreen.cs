@@ -68,7 +68,7 @@ public class CharacterInfoScreen : BusRoute
             if (i < passives.Count)
             {
                 Passives[i].SetActive(true);
-                Passives[i].GetComponentInChildren<Image>().sprite = passives[i].sprite;
+                Passives[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = passives[i].sprite;
             } else
             {
                 Passives[i].SetActive(false);

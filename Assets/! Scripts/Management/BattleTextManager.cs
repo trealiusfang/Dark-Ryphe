@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class BattleTextManager : BusRoute
 {
@@ -33,17 +34,68 @@ public class BattleTextManager : BusRoute
     public Vector2 offset;
     private Vector3 criticalOffset = new Vector3(0, 3);
 
+    private List<textInfo> textInfos = new List<textInfo>();
+
     private void BattleTextEvent(BattleTextEvent ev)
+    {
+        textInfo newTextInfo = new textInfo();
+        newTextInfo.text = ev.text;
+        newTextInfo.character = ev.character;
+        newTextInfo.isCrit = ev.isCrit;
+        newTextInfo.position = ev.position;
+        newTextInfo.textAnimType = ev.textAnimType;
+        newTextInfo.value = ev.value;
+
+        bool found = false;
+        for (int i = 0; i < textInfos.Count; i++)
+        {
+            if (textInfos[i].text == newTextInfo.text)
+            {
+                if (textInfos[i].character != null && textInfos[i].character == newTextInfo.character)
+                {
+                    textInfos[i].value += ev.value;
+                    found = true;
+                } else if (textInfos[i].character == null && newTextInfo.character == null && textInfos[i].position == newTextInfo.position)
+                {
+                    textInfos[i].value += ev.value;
+                    found = true;
+                }
+            }
+        }
+
+        if (!found)
+        {
+            textInfos.Add(newTextInfo);
+        }
+    }
+
+    private IEnumerator Start()
+    {
+        while(true)
+        {
+            while(textInfos.Count > 0)
+            {
+                yield return new WaitForSeconds(.05f);
+                setAndFireText(textInfos[0]);
+                textInfos.RemoveAt(0);
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private void setAndFireText(textInfo textInfo)
     {
         Vector2 totalOffset = new Vector2(UnityEngine.Random.value + offset.x, UnityEngine.Random.value * 2 + offset.y);
         Vector2 CharacterPosition = Vector2.zero;
-        
-        if (ev.character != null)
+
+        if (textInfo.character != null)
         {
-            CharacterPosition = GameInitializer.instance._combatManagers.GetComponent<CombatPositioner>().getPosition(ev.character);
+            CharacterPosition = GameInitializer.instance._combatManagers.GetComponent<CombatPositioner>().getPosition(textInfo.character);
         }
 
-        DisplayText(ev.text, ev.position + CharacterPosition + totalOffset, ev.textAnimType);
+        textInfo.text = textInfo.text.Replace("/value", textInfo.value.ToString());
+
+        DisplayText(textInfo.text, textInfo.position + CharacterPosition + totalOffset, textInfo.textAnimType);
     }
 
     private void DisplayText(string text, Vector2 position, TextAnimType textAnimType, bool isCrit = false)
@@ -247,6 +299,17 @@ public class BattleTextManager : BusRoute
             textSpawnPosition + criticalOffset);
 
     }
+}
+
+[Serializable]
+public class textInfo
+{
+    public string text;
+    public int value;
+    public Vector2 position;
+    public Character character;
+    public TextAnimType textAnimType;
+    public bool isCrit;
 }
 
 public enum TextAnimType

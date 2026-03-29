@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8407e4c46b0aabf42886579a6da4657a, type: 3}
+  m_Name: Huntress
+  m_EditorClassIdentifier: 
+  characterName: Huntress
+  alternativeInfo: Still mysterious as always
+  characterStats:
+    maxHP: 40
+    maxMana: 20
+    manaRegen: 6
+    speed: 5
+    power: 5
+    luck: 4
+    accuracy: 100
+    dodge: 0
+  Abilities:
+  - {fileID: 11400000, guid: 2135c0c2f020c4349b1b088a3c0def04, type: 2}
+  - {fileID: 11400000, guid: e643525c82999f74996a954fa326de69, type: 2}
+  - {fileID: 11400000, guid: 7705a555852205e47800a39505d50f59, type: 2}
+  - {fileID: 11400000, guid: 964d5e68ad6513a478a2c3e38f2c0daa, type: 2}
+  - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  Passives:
+  - {fileID: 11400000, guid: 7855c17220b26a146bd1a046e6527f05, type: 2}
+  - {fileID: 11400000, guid: e1a66937ad7d8a44aab97b3b1c33e6b0, type: 2}
+  baseSprite: {fileID: -474347607228675958, guid: 5e76ad372291c9546a4b9affade51145, type: 3}
+  LookRight: 0
+  spriteOffset: {x: 0, y: 0}
+  DeathTimer: 1
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []

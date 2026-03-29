@@ -11,12 +11,14 @@ public class Ability
     public Sprite sprite = null;
     public AudioClip abilitySuccessClip = null;
     public AudioClip abilityAlternativeClip = null;
+    public AudioClip abilityCritClip = null;
     public AnimationClip abilityEffectClip; //If an ability cast is a ranged spell for example, the spell animation object that spawns uses this animation.
     public void SetAbility(AbilitySO abilitySO)
     {
         sprite = abilitySO.abilitySprite;
         abilitySuccessClip = abilitySO.abilitySuccessClip;
         abilityAlternativeClip = abilitySO.abilityAlternativeClip;
+        abilityCritClip = abilitySO.abilityCritClip;
         abilityEffectClip = abilitySO.abilityEffectClip;
 
         virtualmanaCost = manaCost;
@@ -115,6 +117,9 @@ public class Ability
     public void SetVirtualCost(short changeAmount)
     {
         virtualmanaCost = changeAmount;
+
+        if (virtualmanaCost <= 0 && manaCost != 0) virtualmanaCost = 1;
+        else if (virtualmanaCost <= 0) virtualmanaCost = 0;
     }
 
     public void ChangeVirtualCostType(AbilityCostType costType)

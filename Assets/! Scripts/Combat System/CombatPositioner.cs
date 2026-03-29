@@ -114,6 +114,7 @@ public class CombatPositioner : BusRoute
 
     private IEnumerator resetCoroutine(Character character)
     {
+        if (character == null || character.isDead()) yield break;
         CharacterLister poses = GameInitializer.instance._combatManagers.GetComponent<CharacterLister>();
         List<Character> characters = character.Team == CharacterTeam.Light ? poses.LightCharacters() : poses.DarkCharacters();
 

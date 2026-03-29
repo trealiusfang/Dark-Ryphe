@@ -12,7 +12,6 @@ public class Passive
 
     public List<(Type type, Delegate action)> eventRoutes = new();
 
-    //Yeah pretty useless for now, but looks nice.
     public void SetPassive(PassiveSO passiveSO, Character _assignedUnit)
     {
         if (passiveSO == null) return;
@@ -85,6 +84,14 @@ public class Passive
         if (ev.causer == assignedUnit)
         {
             //I have killed him!!
+        }
+    }
+
+    public virtual void OnAction(ActionHappenedEvent ev)
+    {
+        if (ev.action.target == assignedUnit)
+        {
+            //oh I have taken damage, let's buff me :)
         }
     }
 }

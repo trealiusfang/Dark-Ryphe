@@ -39,9 +39,11 @@ public class TurnManager : BusRoute
 
     IEnumerator StartNextTurn()
     {
+        yield return ResolveTurnEnd(currentUnit);
         if (turnQueue.Count == 0)
         {
             Debug.Log("New Round");
+            EventBus.Raise(new RoundEndEvent { });
             BuildTurnQueue();
         }
         currentUnit = turnQueue.Dequeue();
@@ -74,6 +76,7 @@ public class TurnManager : BusRoute
     }
     public IEnumerator ResolveTurnStart(Character unit)
     {
+        if (unit == null) yield break;
         TurnStartEvent ev = new TurnStartEvent { unit = unit };
 
         //collect effects
@@ -90,6 +93,7 @@ public class TurnManager : BusRoute
 
     public IEnumerator ResolveTurnEnd(Character unit)
     {
+        if (unit == null) yield break;
         TurnEndEvent ev = new TurnEndEvent { unit = unit };
 
         //collect effects
