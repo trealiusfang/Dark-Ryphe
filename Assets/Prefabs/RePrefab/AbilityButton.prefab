@@ -283,6 +283,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manaCost: {fileID: 2588945727629748631}
   abilityName: {fileID: 7741292822119367911}
+  manaCostColor: {r: 0, g: 0.92156863, b: 1, a: 1}
+  hpCostColor: {r: 1, g: 0.22908603, b: 0.18396229, a: 1}
 --- !u!1 &6536231353794033170
 GameObject:
   m_ObjectHideFlags: 0

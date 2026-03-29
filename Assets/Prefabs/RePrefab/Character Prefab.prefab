@@ -65,9 +65,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6783449702562158917}
   - component: {fileID: 1678353037326876396}
+  - component: {fileID: 1255248035681432251}
   - component: {fileID: 954855387319651169}
   - component: {fileID: 7977504293852206944}
-  - component: {fileID: 1255248035681432251}
+  - component: {fileID: 2704483138344856340}
   - component: {fileID: 7760565115034848335}
   m_Layer: 0
   m_Name: Character Prefab
@@ -109,6 +110,7 @@ MonoBehaviour:
   abilityHolder: {fileID: 0}
   effectHolder: {fileID: 0}
   renderer: {fileID: 0}
+  passiveHolder: {fileID: 0}
   baseStats:
     maxHP: 30
     maxMana: 10
@@ -116,9 +118,30 @@ MonoBehaviour:
     speed: 4
     power: 2
     luck: 3
+    accuracy: 100
+    dodge: 0
   currentStats:
     currentHP: 45
     currentMana: 15
+--- !u!114 &1255248035681432251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2685359256604075683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 157587561f4227148a363737cb7c395d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 231363329043028038}
+  movementAnimator: {fileID: 8419025564024918412}
+  actionAnimator: {fileID: 6724970024150498335}
+  AttackAnimations: []
+  IdleAnimations: []
+  HurtAnimations: []
+  DeathAnimations: []
 --- !u!114 &954855387319651169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3ec2b53734143458495880287ad47f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1255248035681432251
+--- !u!114 &2704483138344856340
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,16 +176,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2685359256604075683}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 157587561f4227148a363737cb7c395d, type: 3}
+  m_Script: {fileID: 11500000, guid: ffe7cbc6536325f45b2ee87a46f13bf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 231363329043028038}
-  movementAnimator: {fileID: 8419025564024918412}
-  actionAnimator: {fileID: 6724970024150498335}
-  AttackAnimations: []
-  IdleAnimations: []
-  HurtAnimations: []
-  DeathAnimations: []
 --- !u!65 &7760565115034848335
 BoxCollider:
   m_ObjectHideFlags: 0

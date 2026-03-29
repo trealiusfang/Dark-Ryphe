@@ -50,7 +50,6 @@ public class AbilityDescriptionHandler : BusRoute
         if (!ev.intoHover)
         {
             DisableAbilityExplainer();
-            Debug.Log("Welp it is false");
             return;
         }
         currentCharacter = ev.character;
@@ -61,9 +60,7 @@ public class AbilityDescriptionHandler : BusRoute
 
     private void SetAbilityExplainer()
     {
-        Debug.Log("Welp it is here!");
         if (currentCharacter == null) return;
-        Debug.Log("Welp it shall work!");
         ExplainerGameObject.SetActive(true);
 
         AbilityTitle.text = hoveredAbility.abilityName;

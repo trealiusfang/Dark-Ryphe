@@ -28,6 +28,12 @@ public class TurnEndEvent : EventData
     public Character unit;
 }
 
+public class AbilitySetChanged : EventData
+{
+    public Character unit;
+    public bool selectionEnabled;
+}
+
 public class AbilitySelectedEvent : EventData
 {
     public Character unit;
@@ -56,6 +62,7 @@ public class TargetSelectedEvent : EventData
 public class UnitDeathEvent : EventData
 {
     public Character unit;
+    public Character causer;
 }
 
 public class SFXEvent : EventData 

@@ -18,6 +18,7 @@ public class EffectSystem : MonoBehaviour
         target = action.target;
         actionResponse = ActionResponse.None;
         List<Effect> effects = action.caster.effectHolder.GetEffects();
+        List<Passive> passives = action.caster.passiveHolder.GetPassives();
 
         bool isCrit = false;
         int luckAmount = action.caster.GetStatFloor(statType.Luck);
@@ -32,6 +33,11 @@ public class EffectSystem : MonoBehaviour
             {
                 value = effects[i].actionCalc(action,value, EffectedType.Dealer);
             }
+        }
+
+        for (int i = 0; i < passives.Count; i++)
+        {
+            value = passives[i].actionCalc(action, value, EffectedType.Dealer);
         }
 
         if (value <= 0)
@@ -51,6 +57,13 @@ public class EffectSystem : MonoBehaviour
                     value = effects[i].actionCalc(action, value, EffectedType.Reciever);
                 }
             }
+
+            passives = action.target.passiveHolder.GetPassives();
+
+            for (int i = 0; i < passives.Count; i++)
+            {
+                value = passives[i].actionCalc(action, value, EffectedType.Dealer);
+            }
         }
 
         if (value <= 0)
@@ -59,13 +72,19 @@ public class EffectSystem : MonoBehaviour
             return;
         }
 
-       effects = action.caster.effectHolder.GetEffects();
+        effects = action.caster.effectHolder.GetEffects();
         for (int i = 0; i < effects.Count; i++)
         {
             if (effects[i].responseType == EffectResponseType.OnApply)
             {
                 GameInitializer.instance.StartCoroutine(effects[i].Execute(action, EffectedType.Dealer));
             }
+        }
+        passives = action.caster.passiveHolder.GetPassives();
+
+        for (int i = 0; i < passives.Count; i++)
+        {
+            GameInitializer.instance.StartCoroutine(passives[i].Execute(action, EffectedType.Dealer));
         }
 
         if (action.caster != action.target && target != null)
@@ -78,6 +97,13 @@ public class EffectSystem : MonoBehaviour
                 {
                     GameInitializer.instance.StartCoroutine(effects[i].Execute(action, EffectedType.Reciever));
                 }
+            }
+
+            passives = action.target.passiveHolder.GetPassives();
+
+            for (int i = 0; i < passives.Count; i++)
+            {
+                GameInitializer.instance.StartCoroutine(passives[i].Execute(action, EffectedType.Reciever));
             }
         }
 

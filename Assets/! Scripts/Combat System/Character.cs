@@ -12,6 +12,7 @@ public class Character : BusRoute, IInspectable
     [HideInInspector] public AbilityHolder abilityHolder;
     [HideInInspector] public EffectHolder effectHolder;
     [HideInInspector] public new CharacterRenderer renderer;
+    [HideInInspector] public PassiveHolder passiveHolder;
     [SerializeField] private CombatStats baseStats;
     [SerializeField] private Stats currentStats;
 
@@ -22,6 +23,7 @@ public class Character : BusRoute, IInspectable
         abilityHolder = GetComponent<AbilityHolder>();
         renderer = GetComponent<CharacterRenderer>();
         effectHolder = GetComponent<EffectHolder>();
+        passiveHolder = GetComponent<PassiveHolder>();
 
         if (charData != null)
         {
@@ -38,15 +40,15 @@ public class Character : BusRoute, IInspectable
     public float GetStat(statType StatType)
     {
         float value = 0;
-
+        
         //Convert state type to base values
         switch (StatType)
         {
             case statType.HP_Current:
-                value = baseStats.maxHP;
+                value = currentStats.currentHP;
                 break;
             case statType.HP_Max:
-                value = currentStats.currentHP;
+                value = baseStats.maxHP;
                 break;
             case statType.Mana_Current:
                 value = currentStats.currentMana;
@@ -68,12 +70,20 @@ public class Character : BusRoute, IInspectable
                 break;
         }
 
+        if (StatType == statType.HP_Current) Debug.Log("pre HP: " + value);
         //check for status effects
         foreach(Effect effect in effectHolder.GetEffects())
         {
             value = effect.statCalc(StatType, value);
         }
 
+        //check for passives
+        foreach (Passive passive in passiveHolder.GetPassives())
+        {
+            value = passive.statCalc(StatType, value);
+        }
+
+        if (StatType == statType.HP_Current) Debug.Log("cur HP: " + value);
         return value;
     }
     public int GetStatFloor(statType StatType)
@@ -84,10 +94,10 @@ public class Character : BusRoute, IInspectable
         switch (StatType)
         {
             case statType.HP_Current:
-                value = baseStats.maxHP;
+                value = currentStats.currentHP;
                 break;
             case statType.HP_Max:
-                value = currentStats.currentHP;
+                value = baseStats.maxHP;
                 break;
             case statType.Mana_Current:
                 value = currentStats.currentMana;
@@ -115,6 +125,12 @@ public class Character : BusRoute, IInspectable
             value = effect.statCalc(StatType, value);
         }
 
+        //check for passives
+        foreach (Passive passive in passiveHolder.GetPassives())
+        {
+            value = passive.statCalc(StatType, value);
+        }
+
         return Mathf.FloorToInt(value);
     }
 
@@ -126,10 +142,10 @@ public class Character : BusRoute, IInspectable
         switch (StatType)
         {
             case statType.HP_Current:
-                value = baseStats.maxHP;
+                value = currentStats.currentHP;
                 break;
             case statType.HP_Max:
-                value = currentStats.currentHP;
+                value = baseStats.maxHP;
                 break;
             case statType.Mana_Current:
                 value = currentStats.currentMana;
@@ -156,13 +172,18 @@ public class Character : BusRoute, IInspectable
 
     public void ChangeStat(statType StatType, int value)
     {
+        foreach (Passive p in passiveHolder.GetPassives())
+        {
+            value = p.statChange(StatType, value);
+        }
+
         switch (StatType)
         {
             case statType.HP_Current:
-                baseStats.maxHP += value;
+                currentStats.currentHP += value;
                 break;
             case statType.HP_Max:
-                currentStats.currentHP += value;
+                baseStats.maxHP += value;
                 break;
             case statType.Mana_Current:
                 currentStats.currentMana += value;
@@ -190,29 +211,30 @@ public class Character : BusRoute, IInspectable
         renderer.PlayActionAnimation(CharAnimationType.Idle, 0);
     }
 
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int dmg, Character causer)
     {
         currentStats.currentHP -= dmg;
         renderer.PlayRandomActionClip(CharAnimationType.Hurt);
 
         if (currentStats.currentHP <= 0)
-            Die();
+            Die(causer);
     }
 
-    void Die()
+    private void Die(Character causer)
     {
         dead = true;
-        StartCoroutine(deathFunc());
+        StartCoroutine(deathFunc(causer));
     }
 
-    private IEnumerator deathFunc()
+    private IEnumerator deathFunc(Character causer)
     {
         yield return
         renderer.DeathVisuals();
 
         EventBus.Raise(new UnitDeathEvent
         {
-            unit = this
+            unit = this,
+            causer = causer,
         });
 
         yield return new WaitForSeconds(.1f);

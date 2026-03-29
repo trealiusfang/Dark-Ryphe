@@ -18,34 +18,47 @@ public class Ability
         abilitySuccessClip = abilitySO.abilitySuccessClip;
         abilityAlternativeClip = abilitySO.abilityAlternativeClip;
         abilityEffectClip = abilitySO.abilityEffectClip;
+
+        virtualmanaCost = manaCost;
+        virtualCostType = costType;
     }
 
     //Conditions
     public short manaCost = 4;
+    public short virtualmanaCost = 4;
     public TargetType targetType;
     public CooldownType cooldownType;
     public AbilityFireType fireType;
+    public AbilityCostType costType;
+    public AbilityCostType virtualCostType;
     public short cooldownTime = 0; //Cooldown time is lowered by CharacterScript, if you want a custom behaviour, free feel to add the condition on CharacterScript and apply the behaviour on the ability.
 
     public short[] activasionSpots = {1,1,1,1};
     public short[] targetSpots = {1,1,1,1};
     public int abilityValue = 1;
 
-    public Func<Character, List<Character>, Ability, IEnumerator> AbilityLogic;
+    public Func<Character, List<Character>, IEnumerator> _abilityLogic;
     public virtual IEnumerator Execute(Character caster, List<Character> targets, Ability ability = null)
     {
         yield return PreExecute(caster, targets);
 
-        if (AbilityLogic != null)
-            yield return AbilityLogic(caster, targets, ability);
+        yield return AbilityLogic(caster, targets);
 
         yield return PostExecute(caster, targets);
+    }
+
+    public virtual IEnumerator AbilityLogic(Character caster, List<Character> targets)
+    {
+        if (_abilityLogic != null)
+            yield return _abilityLogic(caster, targets);
     }
 
     protected virtual IEnumerator PreExecute(Character caster, List<Character> targets)
     {
         EventBus.Raise(new AbilityUsedEvent { caster = caster, ability = this, targets = targets });
-        caster.ChangeStat(statType.Mana_Current, -manaCost);
+        if (costType == AbilityCostType.Mana) caster.ChangeStat(statType.Mana_Current, -manaCost);
+        if (costType == AbilityCostType.HP) caster.ChangeStat(statType.HP_Current, -manaCost);
+
         yield return new WaitForSeconds(.50f);
         yield break;
     }
@@ -92,12 +105,35 @@ public class Ability
     {
         return true;
     }
+
+    //The reason we have virtual values of cost and cost type is because we don't want to change their original values, they might change from passives quite a lot
+    public int GetVirtualCost()
+    {
+        return virtualmanaCost;
+    }
+
+    public void SetVirtualCost(short changeAmount)
+    {
+        virtualmanaCost = changeAmount;
+    }
+
+    public void ChangeVirtualCostType(AbilityCostType costType)
+    {
+        virtualCostType = costType;
+    }
 }
+
 
 public enum AbilityFireType
 {
     BySelector,
     Instant
+}
+
+public enum AbilityCostType
+{
+    Mana,
+    HP,
 }
 
 public enum CooldownType

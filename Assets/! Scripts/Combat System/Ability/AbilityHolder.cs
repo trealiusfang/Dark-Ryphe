@@ -19,7 +19,8 @@ public class AbilityHolder : BusRoute
         abilityStrings = character.charData.Abilities;
         for (int i = 0; i < abilityStrings.Count; i++)
         {
-            allAbilities.Add(AbilityLibrary.StringToAbility(abilityStrings[i].name));
+            Ability ability = AbilityLibrary.StringToAbility(abilityStrings[i].name);
+            allAbilities.Add(ability);
             allAbilities[i].SetAbility(abilityStrings[i]);
         }
 
@@ -31,19 +32,32 @@ public class AbilityHolder : BusRoute
 
     public bool abilityAvailable(Ability ability)
     {
-        if (ability.manaCost > character.GetStat(statType.Mana_Current) && ability.manaCost > 0)
+        if (ability.costType == AbilityCostType.Mana)
         {
-            return false;
+            if (ability.manaCost > character.GetStat(statType.Mana_Current) && ability.manaCost > 0)
+            {
+                return false;
+            }
         }
+        if (ability.costType == AbilityCostType.HP)
+        {
+            if (ability.manaCost > character.GetStat(statType.HP_Current) && ability.manaCost > 0)
+            {
+                return false;
+            }
+        }
+
         //If there are no targets
         List<Character> targets = TargetSetter.SetTarget(character, ability);
         if (targets.Count == 0)
         {
+            Debug.Log("No TARGETS");
             return false;
         }
         //Ability specific condition
         if (!ability.abilityCastable(character))
         {
+            Debug.Log("Not castable");
             return false;
         }
 
@@ -53,6 +67,7 @@ public class AbilityHolder : BusRoute
             {
                 if (cooldownHandling.cooldownTime > 0)
                 {
+                    Debug.Log("On cooldown");
                     return false;
                 }
             }
@@ -129,11 +144,25 @@ public class AbilityHolder : BusRoute
     public void AddAbility(Ability newAbility)
     {
         allAbilities.Add((Ability)newAbility);
+        EventBus.Raise(new AbilitySetChanged { unit = character, selectionEnabled = false });
     }
 
     public void RemoveAbility(Ability newAbility)
     {
         allAbilities.Remove((Ability)newAbility);
+        EventBus.Raise(new AbilitySetChanged { unit = character, selectionEnabled = false });
+    }
+
+    public void ChangeAbility(Ability oldAbility, Ability newAbility)
+    {
+        if (!allAbilities.Contains(oldAbility)) return;
+
+        int index = allAbilities.IndexOf(oldAbility);
+
+        allAbilities.Remove(oldAbility);
+        allAbilities.Insert(index, newAbility);
+
+        EventBus.Raise(new AbilitySetChanged { unit = character, selectionEnabled = false});
     }
 
     public void RemoveAbilityAt(int i)

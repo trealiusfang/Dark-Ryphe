@@ -16,16 +16,19 @@ MonoBehaviour:
   alternativeInfo: A basic enemy, but his ways come from a long, dark past
   characterStats:
     maxHP: 45
-    maxMana: 20
+    maxMana: 18
     manaRegen: 8
-    speed: 4
+    speed: 1
     power: 7
     luck: 4
+    accuracy: 100
+    dodge: 0
   Abilities:
   - {fileID: 11400000, guid: 20016cec031559c43a398eb130ec35c7, type: 2}
   - {fileID: 11400000, guid: e32221a41d684b849a10e7159edb0f82, type: 2}
   - {fileID: 11400000, guid: eee31cb080d295146bfce31dc7936d36, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  Passives: []
   baseSprite: {fileID: -2085745340882890450, guid: 51eb4ed1c6144bc4c9d4429142847425, type: 3}
   LookRight: 1
   spriteOffset: {x: 0, y: 0}

@@ -12,6 +12,8 @@ public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     Character master;
     [SerializeField] private TextMeshProUGUI manaCost;
     [SerializeField] private TextMeshProUGUI abilityName;
+    [SerializeField] private Color manaCostColor;
+    [SerializeField] private Color hpCostColor;
     public void SetButton(AbilityButtonHandler handler)
     {
         buttonHandler = handler;
@@ -31,7 +33,7 @@ public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             abilityName.text = newAbility.abilityName;
         }
 
-        if (newAbility.manaCost > 0)
+        if (newAbility.GetVirtualCost() > 0)
         {
             manaCost.gameObject.SetActive(true);
             manaCost.text = newAbility.manaCost.ToString();
@@ -39,6 +41,14 @@ public class AbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         else
         {
             manaCost.gameObject.SetActive(false);
+        }
+
+        if (newAbility.virtualCostType == AbilityCostType.Mana)
+        {
+            manaCost.color = manaCostColor;
+        } else if (newAbility.virtualCostType == AbilityCostType.HP)
+        {
+            manaCost.color = hpCostColor;
         }
     }
 

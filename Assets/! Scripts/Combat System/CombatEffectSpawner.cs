@@ -34,7 +34,7 @@ public class CombatEffectSpawner : BusRoute
 
         clipOverrides["Effect_Base"] = clip;
         animatorController.ApplyOverrides(clipOverrides);
-        Debug.Log("Spawned!");
+
         Destroy(baseObject, clip.length);
     }
 }

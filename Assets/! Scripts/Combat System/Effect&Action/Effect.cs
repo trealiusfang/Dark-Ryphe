@@ -34,12 +34,12 @@ public class Effect
     }
     public virtual float actionCalc(Action action,float _value, EffectedType type)
     {
-        return value;
+        return _value;
     }
 
     public virtual float statCalc(statType statType,float _value)
     {
-        return value;
+        return _value;
     }
 
     public virtual IEnumerator OnTurnStart(TurnStartEvent ev)

@@ -14,6 +14,7 @@ public class AbilityButtonHandler : BusRoute
         Sub<UnitReadyEvent>(CharacterReady);
         Sub<CombatStartEvent>(SetButtons);
 
+        Sub<AbilitySetChanged>(OnAbilitySetChanged);
         Sub<AbilityUsedEvent>(OnAbilityUsed);
         Sub<AbilityFinishedEvent>(OnAbilityFinished);
         Sub<CombatEndEvent>(OnCombatEnded);
@@ -35,21 +36,7 @@ public class AbilityButtonHandler : BusRoute
     {
         currentUnit = ev.unit;
 
-        for (int i = 0; i < currentUnit.getActiveAbilities().Count; i++)
-        {
-            //There are not more than 5 available button spots, we want maximum of 4 active aiblities for now.
-            if (i == 5 || i >= AbilityButtons.Count || currentUnit.getActiveAbilities()[i] == null) break;
-
-            AbilityButtons[i].SetAbilityInfo(currentUnit.getActiveAbilities()[i], currentUnit);
-            ShowButton(AbilityButtons[i]);
-        }
-
-        for (int i = currentUnit.getActiveAbilities().Count; i < 5; i++)
-        {
-            if (i >= AbilityButtons.Count) break;
-
-            HideButton(AbilityButtons[i]);
-        }
+        buttonsReady();
 
         LockAllButtons();
     }
@@ -93,6 +80,27 @@ public class AbilityButtonHandler : BusRoute
             }
         }
     }
+    private void buttonsReady()
+    {
+        if (currentUnit == null) return;
+
+        for (int i = 0; i < currentUnit.getActiveAbilities().Count; i++)
+        {
+            //There are not more than 5 available button spots, we want maximum of 4 active aiblities for now.
+            if (i == 5 || i >= AbilityButtons.Count || currentUnit.getActiveAbilities()[i] == null) break;
+
+            AbilityButtons[i].SetAbilityInfo(currentUnit.getActiveAbilities()[i], currentUnit);
+            ShowButton(AbilityButtons[i]);
+        }
+
+        for (int i = currentUnit.getActiveAbilities().Count; i < 5; i++)
+        {
+            if (i >= AbilityButtons.Count) break;
+
+            HideButton(AbilityButtons[i]);
+        }
+    }
+
 
     private void OnCombatEnded(CombatEndEvent ev)
     {
@@ -106,6 +114,16 @@ public class AbilityButtonHandler : BusRoute
     private void OnAbilityUsed(AbilityUsedEvent ev)
     {
         LockAllButtons();
+    }
+
+    private void OnAbilitySetChanged(AbilitySetChanged ev)
+    {
+        if (currentUnit == ev.unit)
+        {
+            buttonsReady();
+
+            if (ev.selectionEnabled) EnableAllButtons();
+        }
     }
 
     private void OnAbilityFinished(AbilityFinishedEvent ev)

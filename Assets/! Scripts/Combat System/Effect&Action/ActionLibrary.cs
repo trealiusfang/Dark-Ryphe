@@ -19,13 +19,13 @@ public static class ActionLibrary
 
             if (!isCrit)
             {
-                target.TakeDamage(Math.RoundValue(value));
+                target.TakeDamage(Math.RoundValue(value), caster);
                 Debug.Log(target.charData.name + " was attacked, lost " + value + " health! By: " + (caster != null ? caster.name : ""));
                 //Call effects
                 EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), character = target, textAnimType = TextAnimType.Damage });
             } else
             {
-                target.TakeDamage(Math.RoundValue(value * 1.5f));
+                target.TakeDamage(Math.RoundValue(value * 1.5f), caster);
                 Debug.Log(target.charData.name + " was attacked, lost " + Mathf.FloorToInt(value * 1.5f) + " health! By: " + (caster != null ? caster.name : ""));
                 //Call effects
                 EventBus.Raise(new SFXEvent { sfx_string = "Critical" });
@@ -47,7 +47,7 @@ public static class ActionLibrary
         {
             if (target == null || target.isDead()) yield break;
 
-            target.TakeDamage(Math.RoundValue(value));
+            target.TakeDamage(Math.RoundValue(value), caster);
             Debug.Log(target.charData.name + " lost " + value + " health, by venom!");
             //Call effects
             EventBus.Raise(new BattleTextEvent { text = "" + Mathf.FloorToInt(value), character = target, textAnimType = TextAnimType.Venom });
@@ -66,13 +66,14 @@ public static class ActionLibrary
 
         public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
         {
-            int actualValue = (int)((target.GetStat(statType.Mana_Max) - target.GetStat(statType.Mana_Current) - Mathf.Round(value)) < 0 ? target.GetStat(statType.Mana_Max) - target.GetStat(statType.Mana_Current) : Mathf.FloorToInt(value));
-            actualValue = (int)((target.GetStat(statType.Mana_Current) + actualValue) < 0 ? -target.GetStat(statType.Mana_Current) : actualValue);
+            int actualValue = (target.GetStatFloor(statType.Mana_Max) - target.GetStatFloor(statType.Mana_Current) - Mathf.Round(value)) < 0 ? (target.GetStatFloor(statType.Mana_Max) - target.GetStatFloor(statType.Mana_Current)) : Mathf.FloorToInt(value);
+            actualValue = (target.GetStatFloor(statType.Mana_Current) + actualValue) < 0 ? -target.GetStatFloor(statType.Mana_Current) : actualValue;
 
             target.ChangeStat(statType.Mana_Current, actualValue);
             Debug.Log(target.name + " gained " + value + " mana!");
             //Call effects
             EventBus.Raise(new BattleTextEvent { text = "+" + Math.RoundValue(actualValue) + " MANA", character = target, textAnimType = TextAnimType.Freeze });
+            EventBus.Raise(new AbilitySetChanged { unit = target, selectionEnabled = true});
             yield return null;
         }
     }
@@ -88,15 +89,23 @@ public static class ActionLibrary
         public static IEnumerator newActionLogic(Character caster, Character target, float value, bool isCrit)
         {
             value = isCrit ? value * 1.5f : value;
+            int actualValue = 0;
 
-            int actualValue = (int)(target.GetStat(statType.HP_Max) - (target.GetStat(statType.HP_Current) - Math.RoundValue(value)) < 0 ? (target.GetStat(statType.HP_Current) - target.GetStat(statType.HP_Max))  : Mathf.FloorToInt(value));
-            if (actualValue < 0) actualValue = 0;
+            if (target.GetStatFloor(statType.HP_Max) - target.GetStatFloor(statType.HP_Current) - Mathf.Round(value) < 0)
+            {
+                actualValue = target.GetStatFloor(statType.HP_Max) - target.GetStatFloor(statType.HP_Current);
+            } else
+            {
+                actualValue =  Mathf.FloorToInt(value);
+            }
+            if (actualValue <= 0) yield break;
 
             target.ChangeStat(statType.HP_Current, actualValue);
             Debug.Log(caster.name + " gained " + actualValue + " HP!");
             //Call effects
 
             EventBus.Raise(new BattleTextEvent { text = "+" + Math.RoundValue(actualValue) + " HP", character = target, textAnimType = TextAnimType.Heal, isCrit = isCrit });
+            EventBus.Raise(new AbilitySetChanged { unit = target, selectionEnabled = true });
             yield return null;
         }
     }

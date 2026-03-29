@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 public static class AbilityLibrary
 {
@@ -8,18 +9,18 @@ public static class AbilityLibrary
     {
         public NullAbility()
         {
-            abilityName = "Nulll";
+            abilityName = "If you see this... There is an error";
             manaCost = 0;
 
             fireType = AbilityFireType.Instant;
             cooldownType = CooldownType.Round;
             cooldownTime = 1;
 
-            AbilityLogic = EndTurnLogic;
+            _abilityLogic = AbilityLogic;
         }
-        public static IEnumerator EndTurnLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
             EventBus.Raise(new SFXEvent { sfx_string = "Error Alarm"});
             yield return new WaitForSeconds(0.5f);
@@ -37,7 +38,7 @@ public static class AbilityLibrary
             cooldownType = CooldownType.Round;
             cooldownTime = 1;
 
-            AbilityLogic = EndTurnLogic;
+            _abilityLogic = AbilityLogic;
         }
 
         public override string GetAbilityDescription(Character caster)
@@ -50,11 +51,11 @@ public static class AbilityLibrary
         {
             yield return null;
         }
-        public static IEnumerator EndTurnLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, value = caster.GetStat(statType.Power), target = caster, actionType = ActionType.StatIncreaseManaRegen});
+            EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { caster = caster, value = caster.GetStat(statType.Mana_Regen), target = caster, actionType = ActionType.StatIncreaseManaRegen});
             yield return new WaitForSeconds(0.3f);
             EventBus.Raise(new TurnEndEvent { unit = caster });
         }
@@ -68,18 +69,18 @@ public static class AbilityLibrary
             targetType = TargetType.SingleEnemy;
             targetSpots = new short[] { 1, 1, 0, 0 };
 
-            AbilityLogic = WickedSlashLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = caster.GetStatFloor(statType.Power);
             return $"Deals {value} damage, based on units power.";
         }
-        public static IEnumerator WickedSlashLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(0.1f);
 
             foreach (var target in targets)
@@ -97,18 +98,18 @@ public static class AbilityLibrary
             targetType = TargetType.SingleEnemy;
             targetSpots = new short[] { 1, 0, 0, 1 };
 
-            AbilityLogic = HeavySlashLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * 1.5f, caster, new ActionLibrary.DamageAction { });
             return $"Deals heavy power scaling damage ({value})";
         }
-        public static IEnumerator HeavySlashLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(0.55f);
 
             foreach (var target in targets)
@@ -125,18 +126,18 @@ public static class AbilityLibrary
             manaCost = 10;
             targetType = TargetType.AoEEnemy;
             targetSpots = new short[] { 1, 1, 1, 1 };
-            AbilityLogic = GasterBlasterLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * .75f, caster, new ActionLibrary.DamageAction { });
             return $"Deals low AoE damage with high cost ({value})";
         }
-        public static IEnumerator GasterBlasterLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(0.75f);
 
             foreach (var target in targets)
@@ -157,22 +158,22 @@ public static class AbilityLibrary
             cooldownType = CooldownType.Round;
 
             abilityValue = 5;
-            AbilityLogic = ManaStealLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = abilityValue;
             return $"Steal {value} mana from an ally";
         }
-        public static IEnumerator ManaStealLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
 
             yield return new WaitForSeconds(0.1f);
             foreach (var target in targets)
             {
-                float value = target.GetStat(statType.Mana_Current) < ability.abilityValue ? target.GetStat(statType.Mana_Current) : ability.abilityValue;
+                float value = target.GetStat(statType.Mana_Current) < abilityValue ? target.GetStat(statType.Mana_Current) : abilityValue;
                 EffectSystem.ApplyAction(new ActionLibrary.ManaIncrease { target = caster, value = value, caster = caster });
                 target.ChangeStat(statType.Mana_Current,Math.RoundValue(value));
             }
@@ -196,7 +197,7 @@ public static class AbilityLibrary
             manaCost = 4;
             targetType = TargetType.Self;
 
-            AbilityLogic = ToughenUpLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
@@ -204,11 +205,11 @@ public static class AbilityLibrary
             int value2 = 2;
             return $"Get +{value2} BIGGER, and heal for {value}";
         }
-        public static IEnumerator ToughenUpLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(0.1f);
 
             foreach (var target in targets)
@@ -226,20 +227,20 @@ public static class AbilityLibrary
             manaCost = 7;
             targetType = TargetType.SingleEnemy;
             targetSpots = new short[] { 1, 0, 0, 0 };
-            AbilityLogic = SlickAttackLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * 1.5f, caster, new ActionLibrary.DamageAction { });
             return $"Deals heavy power scaling damage ({value}), front-line focused attack";
         }
-        public static IEnumerator SlickAttackLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            ability.PlayCharacterAnimation(caster);
+            PlayCharacterAnimation(caster);
             yield return new WaitForSeconds(0.2f);
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(0.2f);
             foreach (var target in targets)
             {
@@ -258,17 +259,17 @@ public static class AbilityLibrary
             cooldownTime = 1;
             cooldownType = CooldownType.Combat;
 
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             return "Applies Riposte status effect to this unit.";
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(4f);
 
             foreach (var target in targets)
@@ -287,23 +288,23 @@ public static class AbilityLibrary
             targetType = TargetType.AoEEnemy;
             abilityValue = 4;
             targetSpots = new short[] { 1, 1, 0, 0 };
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = abilityValue;
             return $"Applies AOE +{value} Venom , front-line focused attack.";
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.7f);
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyEffect(new EffectLibrary.Venom { caster = caster, target = target, value = ability.abilityValue, duration = ability.abilityValue, durationType = EffectDuration.Round });
+                EffectSystem.ApplyEffect(new EffectLibrary.Venom { caster = caster, target = target, value = abilityValue, duration = abilityValue, durationType = EffectDuration.Round });
             }
         }
     }
@@ -318,13 +319,13 @@ public static class AbilityLibrary
             manaCost = 2;
             targetType = TargetType.AoEAll;
             abilityValue = 1;
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.7f);
 
             foreach (var target in targets)
@@ -356,19 +357,17 @@ public static class AbilityLibrary
             targetType = TargetType.Self;
             fireType = AbilityFireType.Instant;
 
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
         protected override IEnumerator PostExecute(Character caster, List<Character> targets)
         {
             yield return null;
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
-            yield return new WaitForSeconds(.7f);
-
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             float r = UnityEngine.Random.Range(0, 100);
 
             foreach (var target in targets)
@@ -405,13 +404,13 @@ public static class AbilityLibrary
             manaCost = 2;
             targetType = TargetType.Self;
 
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.4f);
 
             float r = UnityEngine.Random.value;
@@ -439,19 +438,19 @@ public static class AbilityLibrary
             manaCost = 3;
             targetType = TargetType.SingleAlly;
             abilityValue = 1;
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.4f);
 
             foreach (var target in targets)
             {
-                EffectSystem.ApplyActionImmidiate(new ActionLibrary.DamageAction { caster = caster, target = target, value = ability.abilityValue * 8});
-                EffectSystem.ApplyAction(new ActionLibrary.Pray { caster = caster, target = target, value = ability.abilityValue});
+                EffectSystem.ApplyActionImmidiate(new ActionLibrary.DamageAction { caster = caster, target = target, value = abilityValue * 8});
+                EffectSystem.ApplyAction(new ActionLibrary.Pray { caster = caster, target = target, value = abilityValue});
             }
 
         }
@@ -466,13 +465,13 @@ public static class AbilityLibrary
 
             cooldownTime = 1;
             cooldownType = CooldownType.Round;
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.3f);
 
             foreach (var target in targets)
@@ -511,13 +510,13 @@ public static class AbilityLibrary
             manaCost = 7;
             targetType = TargetType.AoEAll;
             abilityValue = 1;
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.7f);
 
             foreach (var target in targets)
@@ -569,7 +568,7 @@ public static class AbilityLibrary
             targetType = TargetType.SingleEnemy;
 
             targetSpots = new short[] { 1, 0, 0, 0 };
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
@@ -577,14 +576,14 @@ public static class AbilityLibrary
             return $"Deals {value} damage to all enemy units, scales with power.";
         }
 
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            ability.PlayCharacterAnimation(caster, 1);
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            PlayCharacterAnimation(caster, 1);
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             yield return new WaitForSeconds(.4f);
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilityAlternativeClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilityAlternativeClip });
             yield return new WaitForSeconds(.3f);
             foreach (var target in targets)
             {
@@ -603,25 +602,25 @@ public static class AbilityLibrary
             targetType = TargetType.AoEEnemy;
 
             targetSpots = new short[] { 1, 1, 1, 1 };
-            AbilityLogic = _AbilityLogic;
+            _abilityLogic = AbilityLogic;
         }
         public override string GetAbilityDescription(Character caster)
         {
             int value = EffectSystem.GetEffectCalculation(caster.GetStat(statType.Power) * .33f, caster, new ActionLibrary.DamageAction { });
             return $"Deals {value} damage to all enemy units, scales with power.";
         }
-        public static IEnumerator _AbilityLogic(
+        public override IEnumerator AbilityLogic(
             Character caster,
-            List<Character> targets, Ability ability)
+            List<Character> targets)
         {
-            ability.PlayCharacterAnimation(caster, 1);
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilitySuccessClip });
+            PlayCharacterAnimation(caster, 1);
+            EventBus.Raise(new SFXEvent { sfx_clip = abilitySuccessClip });
             foreach (var target in targets)
             {
-                ability.PlayEffectAnimation(target, new Vector3(0, 4.5f, 0), 5f);
+                PlayEffectAnimation(target, new Vector3(0, 4.5f, 0), 5f);
             }
             yield return new WaitForSeconds(.4f);
-            EventBus.Raise(new SFXEvent { sfx_clip = ability.abilityAlternativeClip });
+            EventBus.Raise(new SFXEvent { sfx_clip = abilityAlternativeClip });
 
             yield return new WaitForSeconds(.3f);
             foreach (var target in targets)

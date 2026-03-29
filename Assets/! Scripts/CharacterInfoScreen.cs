@@ -1,4 +1,6 @@
 using System.Collections;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -60,9 +62,17 @@ public class CharacterInfoScreen : BusRoute
                 i == 5 ? character.GetBaseStat(statType.Mana_Regen).ToString() : "";
         }
 
+        List<Passive> passives = character.passiveHolder.GetPassives();
         for (int i = 0; i < Passives.Count; i++)
         {
-            //Passives[i].GetComponent...
+            if (i < passives.Count)
+            {
+                Passives[i].SetActive(true);
+                Passives[i].GetComponentInChildren<Image>().sprite = passives[i].sprite;
+            } else
+            {
+                Passives[i].SetActive(false);
+            }
         }
     }
 }

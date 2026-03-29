@@ -10,6 +10,7 @@ public class CharacterData : ScriptableObject
     public string alternativeInfo;
     public CombatStats characterStats;
     public List<AbilitySO> Abilities;
+    public List<PassiveSO> Passives;
     [Header("Visuals")]
     public Sprite baseSprite;
     public bool LookRight = true;

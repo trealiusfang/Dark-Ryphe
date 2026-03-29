@@ -15,17 +15,22 @@ MonoBehaviour:
   characterName: Farkeep
   alternativeInfo: He won't let you pass
   characterStats:
-    maxHP: 80
+    maxHP: 120
     maxMana: 25
     manaRegen: 16
     speed: 1
     power: 10
     luck: 9
+    accuracy: 100
+    dodge: 0
   Abilities:
   - {fileID: 11400000, guid: afd47aea436a26a42afa404cb8f80892, type: 2}
   - {fileID: 11400000, guid: f623374ad3f01714494aeea9ba4e5fcd, type: 2}
   - {fileID: 11400000, guid: bf1243eb0d1e6f048b9ff5890af54043, type: 2}
   - {fileID: 11400000, guid: 378f8b10bc98c7741b5c13f049fef1e0, type: 2}
+  Passives:
+  - {fileID: 11400000, guid: ba5fbffb857d612409f1b9489e2031c1, type: 2}
+  - {fileID: 11400000, guid: 9cee7e1b737160540b1cb1548249a7ec, type: 2}
   baseSprite: {fileID: 2822720815099711002, guid: 38e26291822c9b9479504c21a5a98126, type: 3}
   LookRight: 0
   spriteOffset: {x: -2.5, y: 0}
